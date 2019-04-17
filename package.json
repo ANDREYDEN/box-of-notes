@@ -1,0 +1,25 @@
+{
+  "name": "BoxOfNotes",
+  "version": "1.0.0",
+  "description": "A secure digital box of notes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ANDREYDEN/box-of-notes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ANDREYDEN/box-of-notes/issues"
+  },
+  "homepage": "https://github.com/ANDREYDEN/box-of-notes#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mysql": "^2.16.0",
+    "nodemon": "^1.18.11"
+  }
+}
