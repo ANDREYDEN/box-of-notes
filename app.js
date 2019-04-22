@@ -7,7 +7,8 @@ const bodyParser = require("body-parser");
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'qwer'
+    password: 'qwer',
+    database: 'boxofnotes'
 })
 
 db.connect((err) => {
@@ -16,7 +17,7 @@ db.connect((err) => {
 })
 
 const app = express()
-// for post variables
+// for POST variables
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -26,8 +27,8 @@ app.listen('8000', () => {
 
 // creating a DB
 app.get('/create-database/:name', (req, resp) => {
-    let sql = `CREATE DATABASE ${req.params.name}`
-    db.query(sql, (err, result) => {
+    let query = `CREATE DATABASE ${req.params.name}`
+    db.query(query, (err, result) => {
         if (err) throw err
         console.log(result)
         resp.send(`Database ${req.params.name} created!`)
@@ -44,6 +45,17 @@ app.get('/newBox', (req, resp) => {
     resp.sendFile(path.join(__dirname + '/pages/newBox.html'))
 })
 
+// when a new box is created insert it in the 'box' table
 app.post('/newBoxResult', (req, resp) => {
-    resp.send(`Time: ${req.body.time}, Details: ${req.body.details}`)
+    //resp.send(`Time: ${req.body.time}, Details: ${req.body.details}`)
+    let query = `INSERT INTO box(openTime, details) VALUES ('${req.body.time}', '${req.body.details}')`
+    db.query(query, (err, result) => {
+        if (err) throw err
+        console.log(result)
+    })
+})
+
+// respond to the new box submission
+app.get('/newBoxResult', (req, resp) => {
+    resp.sendFile(path.join(__dirname + '/pages/newBoxResult.html'))
 })
