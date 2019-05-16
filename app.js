@@ -61,6 +61,10 @@ app.get('/newBox', (req, resp) => {
 
 // when a new box is created insert it in the 'box' table
 app.post('/newBoxResult', (req, resp) => {
+    if (req.body.time < Date()) {
+        // TODO:
+        //      - handle error: date must be in the future
+    }
     let boxCode = generateBoxCode()
     let query = `INSERT INTO box(boxCode, openTime, details) VALUES ('${boxCode}', '${req.body.time}', '${req.body.details}')`
     db.query(query, (err, result) => {
@@ -77,7 +81,7 @@ app.post('/newBoxResult', (req, resp) => {
 
 // creating a note
 app.get('/newNote', (req, resp) => {
-    resp.sendFile(path.join(__dirname + '/pages/newNote'))
+    resp.render('pages/newNote', {errors: ""})
 })
 
 // when a new Note is added check the boxCode and link it to a corresponding box
@@ -90,9 +94,9 @@ app.post('/newNoteResult', (req, resp) => {
             //      - handle error: something went wrong
             throw err
         } else {
-            if (boxId == []) {
-                // TODO:
-                //      - handle error: a box with this boxCode doesn't exist
+            console.log("BOX ID: ", boxId)
+            if (boxId.length == 0) {
+                resp.render('pages/newNote', {errors: "A box with this box code doesn't exist"})
                 return
             }
             boxId = boxId[0].boxId
@@ -106,7 +110,7 @@ app.post('/newNoteResult', (req, resp) => {
                     throw err
                 } else {
                     // display the result page after a box is added
-                    resp.sendFile(path.join(__dirname + '/pages/newNoteResult'))
+                    resp.render('pages/newNoteResult')
                 }
             })
         }
@@ -115,7 +119,7 @@ app.post('/newNoteResult', (req, resp) => {
 
 // creating a note
 app.get('/openBox', (req, resp) => {
-    resp.sendFile(path.join(__dirname + '/pages/openBox'))
+    resp.render('pages/openBox')
 })
 
 // when a box is opened check the time and display all the notes inside the box
@@ -133,7 +137,6 @@ app.post('/openBoxResult', (req, resp) => {
         }
     })
 })
-
 
 
 
