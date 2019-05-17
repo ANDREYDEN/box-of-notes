@@ -15,12 +15,22 @@
         <main>
             <form action="/newNoteResult" method="post">
                 <label>Box Code</label><br>
-                <input type="text" name="boxCode" id="boxCode" autofocus><br>
-                <err><%= errors %></err><br>
+                <% if (locals.body) {%>
+                    <input type="text" name="boxCode" id="boxCode" value="<%= body.boxCode %>" autofocus><br>
+                <% } else { %>
+                    <input type="text" name="boxCode" id="boxCode" autofocus><br>
+                <% } %>
+
                 <label>Your Note</label><br>
-                <input type="text" name="message" id="note"><br>
+                <% if (locals.body) {%>
+                    <input type="textarea" name="message" id="note" value="<%= body.message %>" autofocus><br>
+                <% } else { %>
+                    <input type="textarea" name="message" id="note" autofocus><br>
+                <% } %>
 
                 <input type="submit" value="Submit Note">
+
+                <% include ../parts/errors %>
             </form>
 
             <a href="/">Back</a>

@@ -13,12 +13,23 @@
         
         <main>
             <form action="/newBoxResult" method="post">
-                <label>Time</label><br>
-                <input type="datetime-local" name="time" id="time" autofocus><br>
-                <label>Details</label><br>
-                <input type="text" name="details" id="details"><br>
+                <label for="time">Time</label><br>
+                <% if (locals.body) {%>
+                    <input type="datetime-local" name="time" id="time" value="<%= body.time %>" autofocus><br>
+                <% } else { %>
+                    <input type="datetime-local" name="time" id="time" autofocus><br>
+                <% } %>
+
+                <label for="details">Details</label><br>
+                <% if (locals.body) {%>
+                    <input type="text" name="details" id="details" value="<%=body.details%>"><br>
+                <% } else { %>
+                    <input type="text" name="details" id="details" ><br>
+                <% } %>
 
                 <input type="submit" value="Create Box">
+
+                <%- include ../parts/errors -%>
             </form>
 
             <a href="/">Back</a>

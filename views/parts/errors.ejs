@@ -1,0 +1,7 @@
+<div class="errors">
+    <% if (locals.errors) {
+        for (let i = 0; i < errors.length; i++) { %>
+            <p><%= errors[i].msg %></p><br>
+        <% } %>
+    <% } %>
+</div>
