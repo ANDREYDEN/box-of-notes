@@ -4,39 +4,41 @@
     <head>
         <meta charset="utf-8">
         <title>Page Title</title>
-        <link rel="stylesheet" type="text/css" href="/form.css">
         <link rel="stylesheet" type="text/css" href="/main.css">
+        <link rel="stylesheet" type="text/css" href="/form.css">
     </head>
     <body>
-        <header>
-        </header>
-        
-        <main>
-            <form action="/newBoxResult" method="post">
-                <h1>New Box</h1>
-
-                <label for="time">Time</label><br>
-                <% if (locals.body) {%>
-                    <input type="datetime-local" name="time" id="time" value="<%= body.time %>" autofocus><br>
-                <% } else { %>
-                    <input type="datetime-local" name="time" id="time" autofocus><br>
-                <% } %>
-
-                <label for="details">Details</label><br>
-                <% if (locals.body) {%>
-                    <input type="text" name="details" id="details" value="<%=body.details%>"><br>
-                <% } else { %>
-                    <input type="text" name="details" id="details" ><br>
-                <% } %>
-
-                <input type="submit" value="Create Box">
-                <a href="/" class="button">Back</a>
-
-                <%- include ../parts/errors -%>
-            </form>
-
-        </main>
-        
-        <%- include ../parts/footer -%>
+        <div class="page">
+            <header>
+            </header>
+            
+            <main>
+                <form action="/newBoxResult" method="post">
+                    <h1>New Box</h1>
+    
+                    <label for="time">Time</label><br>
+                    <% if (locals.body) {%>
+                        <input type="datetime-local" name="time" id="time" value="<%= body.time %>" autofocus><br>
+                    <% } else { %>
+                        <input type="datetime-local" name="time" id="time" autofocus><br>
+                    <% } %>
+    
+                    <label for="details">Details</label><br>
+                    <% if (locals.body) {%>
+                        <input type="text" name="details" id="details" value="<%=body.details%>"><br>
+                    <% } else { %>
+                        <input type="text" name="details" id="details" ><br>
+                    <% } %>
+    
+                    <input type="submit" value="Create Box">
+                    <a href="/" class="button">Back</a>
+    
+                    <%- include ../parts/errors -%>
+                </form>
+    
+            </main>
+            
+            <%- include ../parts/footer -%>
+        </div>
     </body>
 </html>

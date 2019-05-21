@@ -3,20 +3,25 @@
     padding: 0;
 
     font-family: "Garamond";
-
-    --footer-color: white;
-    --border-color: rgb(0, 0, 0);
-    --border-width: 0.1em;
-    --req-color: red;
-    --error-color: rgb(139, 0, 0);
-    --slider-bg: gray;
-    --checkbox-bg: gray;
-    --checkbox-hover-bg: rgb(85, 85, 85);
-    --button-color: rgb(175, 175, 175);
 }
 
-body {
+.page {
     background-color: rgb(224, 162, 178);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+p {
+    font-size: 1.25rem;
 }
 
 a {
@@ -24,7 +29,62 @@ a {
     color: black;
 }
 
+
 /*********************** MAIN ********************/
+
+main {
+    margin: 2rem 0;
+    flex-grow: 1;
+}
+
+main h1 {
+    text-align: center;
+}
+
+main h2 {
+    text-align: center;
+}
+
+/*                      RESULTS                   */ 
+
+#box-result {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+
+    margin: 2rem auto;
+    text-align: center;
+}
+
+#boxCode {
+    color: darkcyan;
+}
+
+#open-result {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.note {
+    height: 10vh;
+    font-size: 2rem;
+    width: 60%;
+    margin: 2rem;
+    padding: 1rem;
+}
+
+.note:nth-child(odd) {
+    background-color: lightblue;
+    float: left;
+}
+
+.note:nth-child(even) {
+    background-color: lightgreen;
+    float: right;
+    align-self: flex-end;
+}
 
 /*                      MENU                   */ 
 
@@ -33,34 +93,34 @@ a {
     text-align: center;
 }
 
-.menu h1 {
+.menu > h1 {
     font-size: 4rem;
 }
 
-.menu ul {
+.menu > ul {
     list-style-type: none;
 }
 
-.menu ul > li {
+.menu > ul > li {
     height: 25vh;
     width: 100%;
     
     display: table;
 }
 
-.menu ul > li:nth-child(1) {
+.menu > ul > li:nth-child(1) {
     background-color: orange;
 }
 
-.menu ul > li:nth-child(2) {
+.menu > ul > li:nth-child(2) {
     background-color: lightblue;
 }
 
-.menu ul > li:nth-child(3) {
+.menu > ul > li:nth-child(3) {
     background-color: purple;
 }
 
-.menu ul > li > a {
+.menu > ul > li > a {
     color: black;
     width: 100%;
     height: 100%;
@@ -71,7 +131,7 @@ a {
     font-size: 3rem;
 }
 
-.menu ul > li > a:hover {
+.menu > ul > li > a:hover {
     border: 3px solid white;
 }
 
@@ -79,10 +139,14 @@ a {
 
 form {
     background-color: lightblue;
-    margin-top: 3rem;
     padding: 2rem;
     border: 2px solid black;
     border-radius: 0.5rem;
+}
+
+.button {
+    margin: 1rem;
+    padding: auto;
 }
 
 .errors {
@@ -95,9 +159,8 @@ form {
 footer {
     color: gray;
 
-    position: absolute;
     bottom: 0;
     width: 100%;
-    padding: 1em 0;
+    padding: 1rem 0;
     text-align: center;
 }

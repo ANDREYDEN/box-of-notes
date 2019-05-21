@@ -4,39 +4,42 @@
     <head>
         <meta charset="utf-8">
         <title>Page Title</title>
-        <link rel="stylesheet" type="text/css" href="/form.css">
         <link rel="stylesheet" type="text/css" href="/main.css">
+        <link rel="stylesheet" type="text/css" href="/form.css">
         <script src="../js/main.js"></script>
     </head>
 
     <body>
-        <header>
-        </header>
-
-        <main>
-            <form action="/newNoteResult" method="post">
-                <label>Box Code</label><br>
-                <% if (locals.body) {%>
-                    <input type="text" name="boxCode" id="boxCode" value="<%= body.boxCode %>" autofocus><br>
-                <% } else { %>
-                    <input type="text" name="boxCode" id="boxCode" autofocus><br>
-                <% } %>
-
-                <label>Your Note</label><br>
-                <% if (locals.body) {%>
-                    <textarea name="message" id="note" value="<%= body.message %>" rows="5"></textarea><br>
-                <% } else { %>
-                    <textarea name="message" id="note" rows="5"></textarea><br>
-                <% } %>
-
-                <input type="submit" value="Submit Note">
-                <a href="/" class="button">Back</a>
-
-                <% include ../parts/errors %>
-            </form>
-
-        </main>
-
-        <%- include ../parts/footer -%>
+        <div class="page">
+            <header>
+            </header>
+            
+            <main>
+                <form action="/newNoteResult" method="post">
+                    <h1>New Note</h1>
+                    <label>Box Code</label><br>
+                    <% if (locals.body) {%>
+                        <input type="text" name="boxCode" id="boxCode" value="<%= body.boxCode %>" autofocus><br>
+                    <% } else { %>
+                        <input type="text" name="boxCode" id="boxCode" autofocus><br>
+                    <% } %>
+            
+                    <label>Your Note</label><br>
+                    <% if (locals.body) { %>
+                        <textarea name="message" id="note" rows="5"><%= body.message %></textarea><br>
+                    <% } else { %>
+                        <textarea name="message" id="note" rows="5"></textarea><br>
+                    <% } %>
+            
+                    <input type="submit" value="Submit Note">
+                    <a href="/" class="button">Back</a>
+            
+                    <% include ../parts/errors %>
+                </form>
+            
+            </main>
+            
+            <%- include ../parts/footer -%>
+        </div>
     </body>
 </html>

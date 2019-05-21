@@ -1,3 +1,14 @@
+* {
+    --border-color: rgb(0, 0, 0);
+    --border-width: 0.1em;
+    --req-color: red;
+    --error-color: rgb(139, 0, 0);
+    --slider-bg: gray;
+    --checkbox-bg: gray;
+    --checkbox-hover-bg: rgb(85, 85, 85);
+    --button-color: rgb(175, 175, 175);
+}
+
 hr {
     border-width: 2px;
     margin-bottom: 1em;
@@ -27,11 +38,10 @@ form h1, h2 {
     text-align: center;
 }
 
-form input, form select, textarea, .button {
+form input, form select, form textarea, .button {
     border: var(--border-width) solid var(--border-color);
     border-radius: 0.2em;
-    margin-bottom: 0.25rem;
-    margin-top: 0.25rem;
+    margin: 0.5rem 0;
     padding: 0.2rem;
     outline: none;
 }
@@ -133,14 +143,12 @@ input[type=button], input[type=submit], .button {
     opacity: 0.8;
     
     padding: 0.5rem;
-    margin: 1rem 1rem 1rem 0;
     border: var(--border-width) solid var(--border-color);
 }
 
-input[type=button]:hover, input[type=submit]:hover {
+input[type=button]:hover, input[type=submit]:hover, .button:hover {
     opacity: 1;
 }
-
 
 /*********************** SLIDER ********************/
 

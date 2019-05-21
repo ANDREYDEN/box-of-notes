@@ -4,25 +4,33 @@
     <head>
         <meta charset="utf-8">
         <title>Page Title</title>
-        <link rel="stylesheet" type="text/css" href="css/main.css">
-        <script src="js/main.js"></script>
+        <link rel="stylesheet" type="text/css" href="/main.css">
+        <link rel="stylesheet" type="text/css" href="/form.css">
     </head>
 
     <body>
-        <header>
-        </header>
-
-        <main>
-            <h1>Box opened successfully</h1>
-            <h2>Here's what was inside:</h2>
-            <ul>
-                <% for (let i = 0; i < notes.length; i++) {%>
-                    <li><%= notes[i].message %></li>
-                <% } %>
-            </ul>
-            <a href="/">Back to Main Menu</a>
-        </main>
-
-        <%- include ../parts/footer -%>
+        <div class="page">
+            <header>
+            </header>
+    
+            <main>
+                <h1>Box opened successfully</h1>
+                <h2>Here's what was inside:</h2>
+                <div id="open-result">
+                    <% for (let i = 0; i < notes.length; i++) {%>
+                        <div class="note"><%= notes[i].message %></div>  
+                    <% } %>
+                </div>
+                <div class="menu">
+                    <ul>
+                        <li>
+                            <a href="/">Back to Main Menu</a>
+                        </li>
+                    </ul>
+                </div>
+            </main>
+    
+            <%- include ../parts/footer -%>
+        </div>
     </body>
 </html>
