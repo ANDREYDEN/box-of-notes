@@ -4,8 +4,8 @@
     <head>
         <meta charset="utf-8">
         <title>Page Title</title>
-        <link rel="stylesheet" type="text/css" href="css/main.css">
-        <script src="../js/main.js"></script>
+        <link rel="stylesheet" type="text/css" href="/form.css">
+        <link rel="stylesheet" type="text/css" href="/main.css">
     </head>
     <body>
         <header>
@@ -13,6 +13,8 @@
         
         <main>
             <form action="/newBoxResult" method="post">
+                <h1>New Box</h1>
+
                 <label for="time">Time</label><br>
                 <% if (locals.body) {%>
                     <input type="datetime-local" name="time" id="time" value="<%= body.time %>" autofocus><br>
@@ -28,14 +30,13 @@
                 <% } %>
 
                 <input type="submit" value="Create Box">
+                <a href="/" class="button">Back</a>
 
                 <%- include ../parts/errors -%>
             </form>
 
-            <a href="/">Back</a>
         </main>
         
-        <footer>
-        </footer>
+        <%- include ../parts/footer -%>
     </body>
 </html>

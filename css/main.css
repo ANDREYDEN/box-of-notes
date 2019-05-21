@@ -1,0 +1,103 @@
+* {
+    margin: 0;
+    padding: 0;
+
+    font-family: "Garamond";
+
+    --footer-color: white;
+    --border-color: rgb(0, 0, 0);
+    --border-width: 0.1em;
+    --req-color: red;
+    --error-color: rgb(139, 0, 0);
+    --slider-bg: gray;
+    --checkbox-bg: gray;
+    --checkbox-hover-bg: rgb(85, 85, 85);
+    --button-color: rgb(175, 175, 175);
+}
+
+body {
+    background-color: rgb(224, 162, 178);
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+/*********************** MAIN ********************/
+
+/*                      MENU                   */ 
+
+.menu {
+    width: 100%;
+    text-align: center;
+}
+
+.menu h1 {
+    font-size: 4rem;
+}
+
+.menu ul {
+    list-style-type: none;
+}
+
+.menu ul > li {
+    height: 25vh;
+    width: 100%;
+    
+    display: table;
+}
+
+.menu ul > li:nth-child(1) {
+    background-color: orange;
+}
+
+.menu ul > li:nth-child(2) {
+    background-color: lightblue;
+}
+
+.menu ul > li:nth-child(3) {
+    background-color: purple;
+}
+
+.menu ul > li > a {
+    color: black;
+    width: 100%;
+    height: 100%;
+
+    vertical-align: middle;
+    display: table-cell;
+
+    font-size: 3rem;
+}
+
+.menu ul > li > a:hover {
+    border: 3px solid white;
+}
+
+/*                      FORM                        */
+
+form {
+    background-color: lightblue;
+    margin-top: 3rem;
+    padding: 2rem;
+    border: 2px solid black;
+    border-radius: 0.5rem;
+}
+
+.errors {
+    color: red;
+    font-size: 1rem;
+}
+
+/*********************** FOOTER ********************/
+
+footer {
+    color: gray;
+
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 1em 0;
+    text-align: center;
+}

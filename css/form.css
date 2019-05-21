@@ -1,0 +1,180 @@
+hr {
+    border-width: 2px;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
+/*********************** FORM ********************/
+
+form {
+    margin: auto;
+    width: 50%;
+}
+
+form * {
+    font-size: 1.5em;
+}
+
+form h1 {
+    font-size: 2em;
+}
+
+form h2 {
+    font-size: 1.5em;
+}
+
+form h1, h2 {
+    text-align: center;
+}
+
+form input, form select, textarea, .button {
+    border: var(--border-width) solid var(--border-color);
+    border-radius: 0.2em;
+    margin-bottom: 0.25rem;
+    margin-top: 0.25rem;
+    padding: 0.2rem;
+    outline: none;
+}
+
+req {
+    color: var(--req-color);
+    font-size: 1.5em;
+}
+
+fieldset {
+    padding: 2em;
+    border-color: var(--border-color);
+}
+
+/*********************** FIELD ********************/
+
+field {
+    display: block;
+    margin-bottom: 1em;
+    padding: 0;
+    position: relative;
+}
+
+field > error {
+    color: var(--error-color);
+}
+
+/*********************** TEXTBOX ********************/
+
+input[type=text] {
+   
+}
+
+/*********************** TEXTAREA ********************/
+
+input[type=textarea] {
+   height: 5rem;
+   width: 50%;
+}
+
+/*********************** CHECKBOX ********************/
+
+/* position the custom checkmark behind the defalut checkbox */
+checkmark {
+    z-index: 1;
+}
+
+checkmark, input[type=checkbox] {
+    background-color: var(--checkbox-bg); 
+    cursor: pointer;
+
+    height: 1em;
+    width: 1em;
+    left: 0;
+    top: 0;
+    position: absolute;
+
+    padding: 0;
+    margin: 0;
+    border: var(--border-width) solid var(--border-color);
+    border-radius: 0.2em;
+}
+
+/* Hide the default checkbox and position it on the top*/
+input[type=checkbox] {
+    opacity: 0.5;
+    z-index: 2;
+    margin: var(--border-width);
+}
+
+input[type=checkbox] ~ label {
+    position: absolute;
+    vertical-align: bottom;
+
+    margin-left: 1.5em;
+    margin-bottom: 0.2em;
+}
+
+input[type=checkbox]:checked + checkmark {
+    background-color: var(--border-color);
+}
+
+input[type=checkbox]:hover:not(:checked) + checkmark {
+    background-color: var(--checkbox-hover-bg);
+}
+
+/*********************** NUMBER ********************/
+
+input[type=number] {
+    width: 25%;
+    padding: 0.1em;
+}
+
+/*********************** BUTTON ********************/
+
+input[type=button], input[type=submit], .button {
+    background-color: var(--button-color);
+    cursor: pointer;
+    opacity: 0.8;
+    
+    padding: 0.5rem;
+    margin: 1rem 1rem 1rem 0;
+    border: var(--border-width) solid var(--border-color);
+}
+
+input[type=button]:hover, input[type=submit]:hover {
+    opacity: 1;
+}
+
+
+/*********************** SLIDER ********************/
+
+input[type=range] {
+    -webkit-appearance: none;
+    background: var(--slider-bg);
+    opacity: 0.6;
+    
+    padding-bottom: 0;
+    margin-bottom: 0;
+    width: 50%;
+    border-radius: 5px;
+}
+
+input[type=range]:hover {
+    opacity: 0.8;
+}
+
+input[type=range]:disabled {
+    opacity: 0.2;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: black;
+    cursor: pointer;
+    
+    width: 8%;
+    height: 1em;
+    border-radius: 0.1em;
+}
+
+.rangeValue {
+    border: 1px solid black;
+    padding: 0.1em;
+    vertical-align: top;
+}

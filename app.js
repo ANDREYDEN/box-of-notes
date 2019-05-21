@@ -27,6 +27,9 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+// serve extra files
+app.use(express.static('css'))
+
 app.set('view engine', 'ejs');
 
 ///////////////////////////////////// FUNCTIONS ////////////////////////////////////////
@@ -102,7 +105,7 @@ app.post('/newNoteResult',
     sanitizeBody('message').trim().escape(),
     (req, resp) => {
         const errors = validationResult(req)
-        if (!errors.array().length == 0) {
+        if (errors.array().length != 0) {
             // re-render the page with errors displaying
             resp.render('pages/newNote', { errors: errors.array(), body: req.body })
         } else {
@@ -135,46 +138,39 @@ app.get('/openBox', (req, resp) => {
 })
 
 // when a box is opened check the time and display all the notes inside the box
-app.post('/openBoxResult', (req, resp) => {
-    // TODO: 
-    //      - query = `SELECT message FROM note, box WHERE box.boxCode = ${req.body.boxCode} and note.boxId = box.boxId`
-    //      - if there is no box with the specified boxCode inform the user (on the openBox page)
-    //      - if the openTime is in the future, then inform the user (on the openBoxResult page)
-
-
-    // find a box with specified boxCode
-    let findBoxQuery = `SELECT boxId, openTime FROM box WHERE boxCode = '${req.body.boxCode}'`
-    db.query(findBoxQuery, (err, boxInfo) => {
-        if (err) {
-            throw err
+app.post('/openBoxResult', 
+    sanitizeBody('boxCode').trim().escape(),
+    (req, resp) => {
+        const errors = validationResult(req)
+        if (errors.array().length != 0) {
+            // re-render the page with errors displaying
+            resp.render('pages/openBox', { errors: errors.array(), body: req.body })
         } else {
-            if (boxInfo.length == 0) {
-                // display an error if the box was not found
-                resp.render('pages/openBox', { errors: "A box with this box code doesn't exist" })
-                return
-            }
-            let boxId = boxInfo[0].boxId
-            let openTime = boxInfo[0].openTime
-
-            if (openTime > Date()) {
-
-            }
-
-            // add a new note record related to the box found
-            let query = `INSERT INTO note(boxId, message) VALUES (${boxId}, '${req.body.message}')`
-            db.query(query, (err, result) => {
-                if (err) {
-                    // TODO:
-                    //      - handle error: something went wrong
-                    throw err
-                } else {
-                    // display the result page after a note is added
-                    resp.render('pages/openBoxResult')
+            // find a box with specified boxCode
+            let findBoxQuery = `SELECT boxId, openTime FROM box WHERE boxCode = '${req.body.boxCode}'`
+            db.query(findBoxQuery, (err, box) => {
+                if (box.length == 0) {
+                    resp.render('pages/openBox', { errors: [{ msg: "A box with this box code doesn't exist" }], body: req.body })
+                    return
                 }
+                // compare the dates (number of seconds from 1970)
+                if (Date.parse(box[0].openTime) > Date.parse(Date().toString())) {
+                    resp.render('pages/openBox', { errors: [{ msg: `This box will be available on ${box[0].openTime}` }], body: req.body })
+                    return
+                }
+                boxId = box[0].boxId
+
+                // find all the notes related to the current box
+                let getNotesQuery = `SELECT message FROM note WHERE note.boxId = ${boxId}`
+                db.query(getNotesQuery, (err, result) => {
+                    if (err) throw err
+                    // display the result page after a note is added
+                    resp.render('pages/openBoxResult', {notes: result})
+                })
             })
         }
-    })
-})
+    },
+)
 
 
 

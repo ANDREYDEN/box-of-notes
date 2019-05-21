@@ -4,8 +4,8 @@
     <head>
         <meta charset="utf-8">
         <title>Page Title</title>
-        <link rel="stylesheet" type="text/css" href="css/main.css">
-        <script src="../js/main.js"></script>
+        <link rel="stylesheet" type="text/css" href="/form.css">
+        <link rel="stylesheet" type="text/css" href="/main.css">
     </head>
 
     <body>
@@ -15,13 +15,19 @@
         <main>
             <form action="/openBoxResult" method="post">
                 <label>Box Code</label><br>
-                <input type="text" name="boxCode" id="boxCode" autofocus><br>
+                <% if (locals.body) {%>
+                    <input type="text" name="boxCode" id="boxCode" value="<%= body.boxCode %>" autofocus><br>
+                <% } else { %>
+                    <input type="text" name="boxCode" id="boxCode" autofocus><br>
+                <% } %>
 
                 <input type="submit" value="Open Box">
+                <a href="/" class="button">Back</a>
+
+                <% include ../parts/errors %>
             </form>
         </main>
 
-        <footer>
-        </footer>
+        <%- include ../parts/footer -%>
     </body>
 </html>

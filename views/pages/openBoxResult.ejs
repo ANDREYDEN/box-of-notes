@@ -13,11 +13,16 @@
         </header>
 
         <main>
-            <p>Here's your box:</p>
+            <h1>Box opened successfully</h1>
+            <h2>Here's what was inside:</h2>
+            <ul>
+                <% for (let i = 0; i < notes.length; i++) {%>
+                    <li><%= notes[i].message %></li>
+                <% } %>
+            </ul>
             <a href="/">Back to Main Menu</a>
         </main>
 
-        <footer>
-        </footer>
+        <%- include ../parts/footer -%>
     </body>
 </html>
