@@ -27,8 +27,9 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// serve extra files
+// serve extra directories with files
 app.use(express.static('css'))
+app.use(express.static('icons'))
 
 app.set('view engine', 'ejs');
 

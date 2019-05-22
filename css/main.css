@@ -5,11 +5,16 @@
     font-family: "Garamond";
 }
 
-.page {
+body {
     background-color: rgb(224, 162, 178);
+}
+
+.page {
+    width: 95%;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    margin: auto;
 }
 
 h1 {
@@ -29,6 +34,30 @@ a {
     color: black;
 }
 
+hr {
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 4px;
+    box-shadow: none;
+}
+
+.container {
+    box-shadow: 0px 1px 8px gray;
+    border-radius: 0.5rem;
+}
+
+/*********************** HEADER ********************/
+
+.logo {
+    width: 10vw;
+    min-width: 100px;
+
+    margin: auto;
+}
+
+.logo a img {
+    width: 100%;
+}
 
 /*********************** MAIN ********************/
 
@@ -37,11 +66,7 @@ main {
     flex-grow: 1;
 }
 
-main h1 {
-    text-align: center;
-}
-
-main h2 {
+main > h1, main > h2 {
     text-align: center;
 }
 
@@ -90,49 +115,60 @@ main h2 {
 
 .menu {
     width: 100%;
+    height: 50vh;
     text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-evenly;
+
+    margin-top: 1rem;
 }
 
-.menu > h1 {
-    font-size: 4rem;
+@media only screen and (max-width: 800px) {
+    /* for phones */
+
+    .menu {
+        flex-direction: column;
+        height: 100vh;
+    }
+
+    .menu-item > svg {
+        height: 60%;
+    }
 }
 
-.menu > ul {
-    list-style-type: none;
+.menu-item {
+    margin: 0.5rem;
+    flex: 1;
 }
 
-.menu > ul > li {
-    height: 25vh;
-    width: 100%;
-    
-    display: table;
+.menu-item > svg {
+    margin: 1rem auto;
 }
 
-.menu > ul > li:nth-child(1) {
+.menu-item > svg rect {
+    fill: white;
+}
+
+.menu-item > h2 {
+    float: bottom;
+}
+
+.menu-item:nth-child(1) {
     background-color: orange;
 }
 
-.menu > ul > li:nth-child(2) {
+.menu-item:nth-child(2) {
     background-color: lightblue;
 }
 
-.menu > ul > li:nth-child(3) {
-    background-color: purple;
+.menu-item:nth-child(3) {
+    background-color: lightgreen;
 }
 
-.menu > ul > li > a {
-    color: black;
-    width: 100%;
-    height: 100%;
-
-    vertical-align: middle;
-    display: table-cell;
-
-    font-size: 3rem;
-}
-
-.menu > ul > li > a:hover {
-    border: 3px solid white;
+.menu-item:hover {
+    box-shadow: 0px 1px 8px black;
 }
 
 /*                      FORM                        */
@@ -157,10 +193,27 @@ form {
 /*********************** FOOTER ********************/
 
 footer {
-    color: gray;
+    color: white;
 
     bottom: 0;
     width: 100%;
     padding: 1rem 0;
     text-align: center;
+}
+
+footer #contacts {
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin: auto;
+}
+
+footer #contacts > a > img {
+    width: 50px;
+    margin: 0 1rem; 
+}
+
+footer #copyright {
+    margin-top: 1rem;
 }
