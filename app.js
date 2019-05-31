@@ -1,8 +1,9 @@
 const express = require('express')
 const mysql = require('mysql')
-const bodyParser = require('body-parser');
-const { body, validationResult } = require('express-validator/check');
-const { sanitizeBody } = require('express-validator/filter');
+const bodyParser = require('body-parser')
+const { body, validationResult } = require('express-validator/check')
+const { sanitizeBody } = require('express-validator/filter')
+const nodemailer = require('nodemailer')
 
 ///////////////////////////////////// DB SETUP ////////////////////////////////////////
 
@@ -75,11 +76,13 @@ app.post('/newBoxResult',
             })
         } else {
             let boxCode = generateBoxCode()
-            let query = `INSERT INTO box(boxCode, openTime, details) VALUES ('${boxCode}', '${req.body.time}', '${req.body.details}')`
+            let query = `INSERT INTO box(boxCode, openTime, details, email) VALUES ('${boxCode}', '${req.body.time}', '${req.body.details}', ${req.body.email})`
             db.query(query, (err, result) => {
                 if (err) {
                     throw err
                 } else {
+                    // send email containing box info
+
                     // display the result page after a box is added
                     resp.render('pages/newBoxResult', {
                         boxCode: boxCode
@@ -200,8 +203,6 @@ app.post('/openBoxResult',
         }
     },
 )
-
-
 
 app.listen('8000', () => {
     console.log('Server started on port 8000')
