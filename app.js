@@ -34,6 +34,16 @@ app.use(express.static('icons'))
 
 app.set('view engine', 'ejs');
 
+///////////////////////////////////// EMAIL SETUP ////////////////////////////////////////
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'boxofnotes.info@gmail.com',
+        pass: 'unboxing3000'
+    }
+});
+
 ///////////////////////////////////// FUNCTIONS ////////////////////////////////////////
 
 function generateBoxCode() {
@@ -76,12 +86,32 @@ app.post('/newBoxResult',
             })
         } else {
             let boxCode = generateBoxCode()
-            let query = `INSERT INTO box(boxCode, openTime, details, email) VALUES ('${boxCode}', '${req.body.time}', '${req.body.details}', ${req.body.email})`
+            let query = `INSERT INTO box(boxCode, openTime, details, email) VALUES ('${boxCode}', '${req.body.time}', '${req.body.details}', '${req.body.email}')`
             db.query(query, (err, result) => {
                 if (err) {
                     throw err
                 } else {
                     // send email containing box info
+
+                    var mailOptions = {
+                        from: 'boxofnotes.info@gmail.com',
+                        to: req.body.email,
+                        subject: 'Your new box',
+                        text: 
+                        `
+                        Hi there,
+
+                        You've just created a new box!
+                        `
+                    };
+
+                    transporter.sendMail(mailOptions, function (err, info) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                        }
+                    });
 
                     // display the result page after a box is added
                     resp.render('pages/newBoxResult', {
