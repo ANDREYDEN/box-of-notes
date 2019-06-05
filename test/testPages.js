@@ -1,5 +1,7 @@
-const expect = require('chai').expect
-const puppeteer = require('puppeteer')
+const chai = require('chai')
+const expect = chai.expect // assertion functionality
+chai.use(require('chai-url')); // url checking
+const puppeteer = require('puppeteer') // e2e testing
 
 describe('New Box', function() {
 
@@ -14,13 +16,29 @@ describe('New Box', function() {
         await page.click('[type=submit]')
     }
 
-    // checks if the cerroct error is displayed
+    // checks if the correct error is displayed
     async function checkIfErrorIs(page, errorMessage) {
         await page.waitForSelector('.errors')
         let errors = await page.$('.errors')
         let error = await errors.$('p')
         let errorText = await page.evaluate(element => element.textContent, error)
         expect(errorText).to.be.equal(errorMessage)
+    }
+
+    // Returns an object that is used to populate the time form field. Uses current time +offset minutes
+    function getTimeInput(offset=1) {
+        let addZero = (number) => (number < 10) ? '0' + number : number.toString()
+        var year = new Date().getFullYear().toString()
+        var date = addZero(new Date().getDate())
+        var month = addZero(new Date().getMonth() + 1)
+        var hour = addZero(new Date().getHours() % 12)
+        var dayHalf = (new Date().getHours() < 12) ? 'A' : 'P'
+        var minute = addZero(new Date().getMinutes() + offset)
+        var other = month + date + hour + minute + dayHalf
+        return {
+            year: year,
+            other: other
+        }
     }
 
     it('should display an error if the date is in the past', async () => {
@@ -66,6 +84,25 @@ describe('New Box', function() {
 
         await checkIfErrorIs(page, 'Please specify your email - we will use it to send you the results')
 
+        browser.close()
+    }).timeout(20000)
+
+    it.only('should transfer to the createBoxResult page', async () => {
+        const browser = await puppeteer.launch({
+            headless: false,
+            slowMo: 10
+        })
+        const page = await browser.newPage()
+        await page.goto('localhost:8000/newBox')
+
+        // navigations
+        await fillForm(page, {
+            time: getTimeInput(),
+            details: 'Some Details',
+            email: 'andrey2850@gmail.com'
+        })
+
+        expect(page.url()).to.have.path('/newBoxResult')
         browser.close()
     }).timeout(20000)
 })

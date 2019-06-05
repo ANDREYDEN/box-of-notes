@@ -10,24 +10,17 @@
 
     <body>
         <div class="page">
-            <header>
-            </header>
+            <%- include ../parts/header -%>
     
             <main>
                 <h1>Box opened successfully</h1>
                 <h2>Here's what was inside:</h2>
                 <div id="open-result">
-                    <% for (let i = 0; i < notes.length; i++) {%>
-                        <div class="note"><%= notes[i].message %></div>  
+                    <% for (let i = 0; i < fields.notes.length; i++) {%>
+                        <div class="note"><%= fields.notes[i].message %></div>  
                     <% } %>
                 </div>
-                <div class="menu">
-                    <ul>
-                        <li>
-                            <a href="/">Back to Main Menu</a>
-                        </li>
-                    </ul>
-                </div>
+                <a href="/" class="button">Back to Main Menu</a>
             </main>
     
             <%- include ../parts/footer -%>
