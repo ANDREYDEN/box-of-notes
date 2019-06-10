@@ -48,6 +48,7 @@ var transporter = nodemailer.createTransport({
 
 ///////////////////////////////////// FUNCTIONS ////////////////////////////////////////
 
+// generates a random code that will be used to identify the box
 function generateBoxCode() {
     let boxCode = ''
     for (let i = 0; i < 6; i++) {
@@ -56,8 +57,22 @@ function generateBoxCode() {
     return boxCode
 }
 
+// formats the date to 'ddd mm dd, yyyy'
 function formatDate(date) {
     return date.toString().split(' ').slice(1, 5).join(' ')
+}
+
+// changes the 'opened' property to 1 in the db record with the specified (identifier, value) pair
+function openBox(identifier, value) {
+    // if the passed value is string - add quotes for correct SQL syntax
+    if (typeof(value) == 'string') {
+        value = "'" + value + "'"
+    }
+    let query = `UPDATE box SET opened = 1 WHERE ${identifier} = ${value}`
+    console.log(`Query: ${query}`)
+    db.query(query, (err, result) => {
+        if (err) throw err
+    })
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -109,7 +124,7 @@ app.post('/newBoxResult',
                             "You've just created a new box!\n\n" +     
 
                             `Use this (${db.config.host}:${port}/newNote/${boxCode}) URL to submit notes to your box.\n` + 
-                            `Your box will be available on ${req.body.openTime} and you will receive an email as soon as it is open.\n` +
+                            `Your box will be available on ${formatDate(req.body.time)} and you will receive an email as soon as it is open.\n` +
                             `You can also use your box code ${boxCode} to open it yourself here (${db.config.host}:${port}/openBox).\n\n` +
 
                             'Thank you for using Box of Notes.\n\n' +
@@ -121,7 +136,9 @@ app.post('/newBoxResult',
                         console.log('Email sent: ' + info.response);
                     });
 
-                    // 
+                    // schedule the opening of the box for the specified time
+                    console.log(req.body.time, new Date(req.body.time), new Date(), new Date(req.body.time) - new Date())
+                    setTimeout(() => {openBox('boxCode', boxCode)}, new Date(req.body.time) - new Date())
 
                     // display the result page after a box is added
                     resp.render('pages/newBoxResult', {
@@ -246,13 +263,8 @@ app.post('/openBoxResult',
                 } else {
                     boxId = box[0].boxId
 
-                    // TODO:
-                    //      - create a function (boxId) => {make it opened}
-                    //      - run it here and in createBox with setTimeout()
-                    let updateStateQuery = `UPDATE box SET opened = 1 WHERE boxId = ${boxId}`
-                    db.query(updateStateQuery, (err, result) => {
-                        if (err) throw err
-                    })
+                    // update the box record in the DB
+                    openBox('boxId', boxId)
 
                     // find all the notes related to the current box
                     let getNotesQuery = `SELECT message FROM note WHERE note.boxId = ${boxId}`
