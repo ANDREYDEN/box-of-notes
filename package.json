@@ -28,5 +28,8 @@
     "nodemailer": "^6.2.1",
     "puppeteer": "^1.17.0",
     "request": "^2.88.0"
+  }, 
+  "engines": {
+    "node": "10.8.0"
   }
 }

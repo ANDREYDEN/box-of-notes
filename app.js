@@ -7,7 +7,12 @@ const nodemailer = require('nodemailer')
 
 ///////////////////////////////////// DB SETUP ////////////////////////////////////////
 
-const port = '8000'
+// decide what port to run on to (heroku vs local)
+const localPort = '8000'
+let PORT = process.env.PORT
+if (PORT == null || PORT == '') {
+    PORT = localPort
+}
 
 const db = mysql.createConnection({
     host: 'localhost',
@@ -283,6 +288,6 @@ app.post('/openBoxResult',
     }
 )
 
-app.listen(port, () => {
-    console.log('Server started on port ' + port)
+app.listen(PORT, () => {
+    console.log('Server started on port ' + PORT)
 })
