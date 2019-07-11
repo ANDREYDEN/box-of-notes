@@ -17,21 +17,18 @@ if (PORT == null || PORT == '') {
     runningLocally = false
 }
 
-// if (runningLocally) {
 //     const db = mysql.createConnection({
 //         host: 'localhost',
 //         user: 'root',
 //         password: 'qwer',
 //         database: 'boxofnotes'
 //     })
-// } else {
-    const db = mysql.createConnection({
-        host: 'us-cdbr-iron-east-02.cleardb.net',
-        user: 'bdee3f04b93939',
-        password: '93174ba8',
-        database: 'heroku_9c462e64da52142'
-    })
-// }
+const db = mysql.createConnection({
+    host: 'us-cdbr-iron-east-02.cleardb.net',
+    user: 'bdee3f04b93939',
+    password: '93174ba8',
+    database: 'heroku_9c462e64da52142'
+})
 
 // start mysql
 db.connect((err) => {
@@ -140,9 +137,9 @@ app.post('/newBoxResult',
                             'Hi there,\n' + 
                             "You've just created a new box!\n\n" +     
 
-                            `Use this (${db.config.host}:${port}/newNote/${boxCode}) URL to submit notes to your box.\n` + 
+                            `Use this (${db.config.host}/newNote/${boxCode}) URL to submit notes to your box.\n` + 
                             `Your box will be available on ${formatDate(req.body.time)} and you will receive an email as soon as it is open.\n` +
-                            `You can also use your box code ${boxCode} to open it yourself here (${db.config.host}:${port}/openBox).\n\n` +
+                            `You can also use your box code ${boxCode} to open it yourself here (${db.config.host}/openBox).\n\n` +
 
                             'Thank you for using Box of Notes.\n\n' +
 
