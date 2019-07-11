@@ -8,18 +8,30 @@ const nodemailer = require('nodemailer')
 ///////////////////////////////////// DB SETUP ////////////////////////////////////////
 
 // decide what port to run on to (heroku vs local)
+var runningLocally = true
 const localPort = '8000'
 let PORT = process.env.PORT
+
 if (PORT == null || PORT == '') {
     PORT = localPort
+    runningLocally = false
 }
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'qwer',
-    database: 'boxofnotes'
-})
+// if (runningLocally) {
+//     const db = mysql.createConnection({
+//         host: 'localhost',
+//         user: 'root',
+//         password: 'qwer',
+//         database: 'boxofnotes'
+//     })
+// } else {
+    const db = mysql.createConnection({
+        host: 'us-cdbr-iron-east-02.cleardb.net',
+        user: 'bdee3f04b93939',
+        password: '93174ba8',
+        database: 'heroku_9c462e64da52142'
+    })
+// }
 
 // start mysql
 db.connect((err) => {
