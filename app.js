@@ -118,7 +118,6 @@ app.post('/newBoxResult',
             var boxCode = generateBoxCode()
             // convert local time to UTC standard
             const UTCTime = new Date(req.body.time).toUTCString()
-            console.log(typeof(UTCTime))
             console.log('UTC Time: ', UTCTime)
             // TODO:
             //      - why 00000?
@@ -142,7 +141,7 @@ app.post('/newBoxResult',
 
                             'Thank you for using Box of Notes.\n\n' +
 
-                            'Andrii Denysenko'
+                            'Andrii Denysenko | Founder'
                     };
                     transporter.sendMail(mailOptions, (err, info) => {
                         if (err) throw err
@@ -265,9 +264,9 @@ app.post('/openBoxResult',
                 if (box.length == 0) {
                     formErrors.push({ msg: "A box with this box code doesn't exist" })
                 } else {
-                    // compare the dates (number of seconds from 1970)
-                    if (Date.parse(box[0].openTime) > Date.parse(Date().toString())) {
-                        formErrors.push({ msg: `This box will be available on ${formatDate(box[0].openTime)}` }) 
+                    // check if the box is ready for opening
+                    if (box[0].opened == 0) {
+                        formErrors.push({ msg: `This box will be available on ${formatDate(new Date(box[0].openTime))}` }) 
                     }
                 }
 
