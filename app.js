@@ -7,27 +7,20 @@ const nodemailer = require('nodemailer')
 
 ///////////////////////////////////// DB SETUP ////////////////////////////////////////
 
-// decide what port to run on to (heroku vs local)
-var runningLocally = true
-const localPort = '8000'
-let PORT = process.env.PORT
-
+// connect to DB and get the port from Heroku environment variables
+var PORT = process.env.PORT
 if (PORT == null || PORT == '') {
-    PORT = localPort
-    runningLocally = false
+    console.log('WHAT')
+    PORT = '8000'
 }
 
-//     const db = mysql.createConnection({
-//         host: 'localhost',
-//         user: 'root',
-//         password: 'qwer',
-//         database: 'boxofnotes'
-//     })
+const DB_URL = process.env.DATABASE_URL
+const DB_URL_PARTS = DB_URL.split(/[:\/@?]/)
 const db = mysql.createConnection({
-    host: 'us-cdbr-iron-east-02.cleardb.net',
-    user: 'bdee3f04b93939',
-    password: '93174ba8',
-    database: 'heroku_9c462e64da52142'
+    user: DB_URL_PARTS[3],
+    password: DB_URL_PARTS[4],
+    host: DB_URL_PARTS[5],
+    database: DB_URL_PARTS[6]
 })
 
 // start mysql
@@ -55,8 +48,8 @@ app.set('view engine', 'ejs');
 var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'boxofnotes.info@gmail.com',
-        pass: 'unboxing3000'
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD
     }
 });
 
@@ -123,12 +116,18 @@ app.post('/newBoxResult',
             })
         } else {
             var boxCode = generateBoxCode()
-            let query = `INSERT INTO box(boxCode, openTime, details, email) VALUES ('${boxCode}', '${req.body.time}', '${req.body.details}', '${req.body.email}')`
+            // convert local time to UTC standard
+            const UTCTime = new Date(req.body.time).toUTCString()
+            console.log(typeof(UTCTime))
+            console.log('UTC Time: ', UTCTime)
+            // TODO:
+            //      - why 00000?
+            let query = `INSERT INTO box(boxCode, openTime, details, email) VALUES ('${boxCode}', '${UTCTime}', '${req.body.details}', '${req.body.email}')`
             db.query(query, (err, result) => {
                 if (err) {
                     throw err
                 } else {
-                    // send email containing box info
+                    // send email containing box info and note adding instructions
                     var mailOptions = {
                         from: 'boxofnotes.info@gmail.com',
                         to: req.body.email,
@@ -137,9 +136,9 @@ app.post('/newBoxResult',
                             'Hi there,\n' + 
                             "You've just created a new box!\n\n" +     
 
-                            `Use this (${db.config.host}/newNote/${boxCode}) URL to submit notes to your box.\n` + 
-                            `Your box will be available on ${formatDate(req.body.time)} and you will receive an email as soon as it is open.\n` +
-                            `You can also use your box code ${boxCode} to open it yourself here (${db.config.host}/openBox).\n\n` +
+                            `Use this (${process.env.DOMAIN}/newNote/${boxCode}) URL to submit notes to your box.\n` + 
+                            `Your box will be available on ${formatDate(new Date(req.body.time))} and you will receive an email as soon as it is open.\n` +
+                            `You can also use your box code ${boxCode} to open it yourself here (${process.env.DOMAIN}/openBox).\n\n` +
 
                             'Thank you for using Box of Notes.\n\n' +
 
@@ -151,7 +150,10 @@ app.post('/newBoxResult',
                     });
 
                     // schedule the opening of the box for the specified time
-                    console.log(req.body.time, new Date(req.body.time), new Date(), new Date(req.body.time) - new Date())
+                    // TODO:
+                    //      - test time
+                    console.log(req.body.time)
+                    console.log(formatDate(new Date(req.body.date)), new Date(req.body.time), new Date(), new Date(req.body.time) - new Date())
                     setTimeout(() => {openBox('boxCode', boxCode)}, new Date(req.body.time) - new Date())
 
                     // display the result page after a box is added
