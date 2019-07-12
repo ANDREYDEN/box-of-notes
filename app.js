@@ -142,11 +142,11 @@ app.post('/newBoxResult',
                             'Thank you for using Box of Notes.\n\n' +
 
                             'Andrii Denysenko | Founder'
-                    };
+                    }
                     transporter.sendMail(mailOptions, (err, info) => {
                         if (err) throw err
-                        console.log('Email sent: ' + info.response);
-                    });
+                        console.log('Email sent: ' + info.response)
+                    })
 
                     // schedule the opening of the box for the specified time
                     // TODO:
