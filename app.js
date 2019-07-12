@@ -118,9 +118,6 @@ app.post('/newBoxResult',
             var boxCode = generateBoxCode()
             // convert local time to UTC standard
             const UTCTime = new Date(req.body.time).toUTCString()
-            console.log('UTC Time: ', UTCTime)
-            // TODO:
-            //      - why 00000?
             let query = `INSERT INTO box(boxCode, openTime, details, email) VALUES ('${boxCode}', '${UTCTime}', '${req.body.details}', '${req.body.email}')`
             db.query(query, (err, result) => {
                 if (err) {
@@ -149,10 +146,6 @@ app.post('/newBoxResult',
                     })
 
                     // schedule the opening of the box for the specified time
-                    // TODO:
-                    //      - test time
-                    console.log(req.body.time)
-                    console.log(formatDate(new Date(req.body.date)), new Date(req.body.time), new Date(), new Date(req.body.time) - new Date())
                     setTimeout(() => {openBox('boxCode', boxCode)}, new Date(req.body.time) - new Date())
 
                     // display the result page after a box is added
