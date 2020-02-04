@@ -1,13 +1,11 @@
 <%- include ../parts/header -%>
     
 <main>
-    <h1>Box opened successfully</h1>
-    <h2>Here's what was inside:</h2>
-    <div id="open-result">
-        <% for (let i = 0; i < fields.notes.length; i++) {%>
-            <div class="note"><%= fields.notes[i].message %></div>  
-        <% } %>
-    </div>
+    <h1><%= box.details %></h1>
+    <h2><%= box.boxCode %></h2>
+    <% if (box.opened) {>
+        <a href="/box/<%= box.boxCode %>/content"></a>
+    <% } %>
     <a href="/" class="button">Back to Main Menu</a>
 </main>
     

@@ -1,7 +1,7 @@
 <%- include ../parts/header -%>
 <main width="80%">
     <% if (loadingError == '') { %>
-        <form action="/newNoteResult" method="post">
+        <form action="/box/<%= boxCode %>/submit" method="post">
             <h1>New Note</h1>
             <p>Box Description: <%= fields.description %></p>
 
