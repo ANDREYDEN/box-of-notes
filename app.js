@@ -23,6 +23,8 @@ const db = mysql.createConnection({
     database: DB_URL_PARTS[6]
 })
 
+console.log(DB_URL_PARTS[4]);
+
 // start mysql
 db.connect((err) => {
     if (err) throw err
