@@ -3,16 +3,11 @@ const mysql = require('mysql')
 const bodyParser = require('body-parser')
 const { body, validationResult } = require('express-validator/check')
 const { sanitizeBody } = require('express-validator/filter')
-const nodemailer = require('nodemailer')
-
+const { generateBoxCode, formatDate, openBox } = require('./src/functions')
 ///////////////////////////////////// DB SETUP ////////////////////////////////////////
 
 // connect to DB and get the port from Heroku environment variables
-var PORT = process.env.PORT
-if (PORT == null || PORT == '') {
-    console.log('WHAT')
-    PORT = '8000'
-}
+const PORT = process.env.PORT || '8000'
 
 const DB_URL = process.env.DATABASE_URL
 const DB_URL_PARTS = DB_URL.split(/[:\/@?]/)
@@ -22,8 +17,6 @@ const db = mysql.createConnection({
     host: DB_URL_PARTS[5],
     database: DB_URL_PARTS[6]
 })
-
-console.log(DB_URL_PARTS[4]);
 
 // start mysql
 db.connect((err) => {
@@ -39,50 +32,15 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// serve extra directories with files
-app.use(express.static('css'))
-app.use(express.static('icons'))
+app.use(express.static('public'))
+
 
 app.set('view engine', 'ejs');
-
-///////////////////////////////////// EMAIL SETUP ////////////////////////////////////////
-
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD
-    }
-});
 
 ///////////////////////////////////// FUNCTIONS ////////////////////////////////////////
 
 // generates a random code that will be used to identify the box
-function generateBoxCode() {
-    let boxCode = ''
-    for (let i = 0; i < 6; i++) {
-        boxCode += String.fromCharCode(Math.round(Math.random() * 25) + 65)
-    }
-    return boxCode
-}
 
-// formats the date to 'ddd mm dd, yyyy'
-function formatDate(date) {
-    return date.toString().split(' ').slice(1, 5).join(' ')
-}
-
-// changes the 'opened' property to 1 in the db record with the specified (identifier, value) pair
-function openBox(identifier, value) {
-    // if the passed value is string - add quotes for correct SQL syntax
-    if (typeof(value) == 'string') {
-        value = "'" + value + "'"
-    }
-    let query = `UPDATE box SET opened = 1 WHERE ${identifier} = ${value}`
-    console.log(`Query: ${query}`)
-    db.query(query, (err, result) => {
-        if (err) throw err
-    })
-}
 
 ////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// PAGES ////////////////////////////////////////
@@ -103,7 +61,7 @@ app.get('/newBox', (req, resp) => {
 
 // when a new box is created insert it in the 'box' table
 app.post('/newBoxResult', 
-    body('time', 'The opening time must be in the future').isAfter(Date()),
+    // body('time', 'The opening time must be in the future').isAfter(Date()),
     body('email', 'Please specify your email - we will use it to send you the results').not().isIn(['', null, undefined]),
     body('details', 'Sorry, the description is too long').isLength({ max: 255 }),
     sanitizeBody('details').trim().escape(),
@@ -119,36 +77,21 @@ app.post('/newBoxResult',
         } else {
             var boxCode = generateBoxCode()
             // convert local time to UTC standard
-            const UTCTime = new Date(req.body.time).toUTCString()
-            let query = `INSERT INTO box(boxCode, openTime, details, email) VALUES ('${boxCode}', '${UTCTime}', '${req.body.details}', '${req.body.email}')`
+            const EPOCH_MS = new Date(req.body.time).getTime()
+            let query = `INSERT INTO box(boxCode, openTime, details, email) VALUES ('${boxCode}', '${EPOCH_MS}', '${req.body.details}', '${req.body.email}')`
             db.query(query, (err, result) => {
                 if (err) {
                     throw err
                 } else {
-                    // send email containing box info and note adding instructions
-                    var mailOptions = {
-                        from: 'boxofnotes.info@gmail.com',
-                        to: req.body.email,
-                        subject: 'Your new box',
-                        text: 
-                            'Hi there,\n' + 
-                            "You've just created a new box!\n\n" +     
-
-                            `Use this (${process.env.DOMAIN}/newNote/${boxCode}) URL to submit notes to your box.\n` + 
-                            `Your box will be available on ${formatDate(new Date(req.body.time))} and you will receive an email as soon as it is open.\n` +
-                            `You can also use your box code ${boxCode} to open it yourself here (${process.env.DOMAIN}/openBox).\n\n` +
-
-                            'Thank you for using Box of Notes.\n\n' +
-
-                            'Andrii Denysenko | Founder'
-                    }
-                    transporter.sendMail(mailOptions, (err, info) => {
-                        if (err) throw err
-                        console.log('Email sent: ' + info.response)
-                    })
-
                     // schedule the opening of the box for the specified time
-                    setTimeout(() => {openBox('boxCode', boxCode)}, new Date(req.body.time) - new Date())
+                    setTimeout(() =>
+                        openBox({
+                            db: db, 
+                            identifier: 'boxCode', 
+                            value: boxCode
+                        }), 
+                        new Date().getTime() - EPOCH_MS
+                    )
 
                     // display the result page after a box is added
                     resp.render('pages/newBoxResult', {
@@ -293,6 +236,6 @@ app.post('/openBoxResult',
     }
 )
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT, process.env.HOST, () => {
     console.log('Server started on port ' + PORT)
 })
