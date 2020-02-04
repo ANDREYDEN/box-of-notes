@@ -1,42 +1,28 @@
-<!DOCTYPE html>
+<%- include ../parts/header -%>
+            
+<main>
+    <form action="/newBoxResult" method="post">
+        <h1>New Box</h1>
 
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Page Title</title>
-        <link rel="stylesheet" type="text/css" href="/main.css">
-        <link rel="stylesheet" type="text/css" href="/form.css">
-    </head>
-    <body>
-        <div class="page">
-            <%- include ../parts/header -%>
-            
-            <main>
-                <form action="/newBoxResult" method="post">
-                    <h1>New Box</h1>
-    
-                    <label for="time">Opening Time</label><br>
-                    <% if (locals.body) {%>
-                        <input type="datetime-local" name="time" id="time" value="<%= body.time %>" autofocus><br>
-                        <label for="details">Box Desciption</label><br>
-                        <input type="text" name="details" id="details" value="<%= body.details %>"><br>
-                        <label for="email">Your Email</label><br>
-                        <input type="email" name="email" id="email" value="<%= body.email %>"><br>
-                    <% } else { %>
-                        <input type="datetime-local" name="time" id="time" autofocus><br>
-                        <label for="details">Box Desciption</label><br>
-                        <input type="text" name="details" id="details"><br>
-                        <label for="email">Your Email</label><br>
-                        <input type="email" name="email" id="email"><br>
-                    <% } %>
-                    <input type="submit" value="Create Box">
-                    <a href="/" class="button">Back</a>
-    
-                    <%- include ../parts/errors -%>
-                </form>
-            </main>
-            
-            <%- include ../parts/footer -%>
-        </div>
-    </body>
-</html>
+        <label for="time">Opening Time</label><br>
+        <% if (locals.body) {%>
+            <input type="datetime-local" name="time" id="time" value="<%= body.time %>" autofocus><br>
+            <label for="details">Box Desciption</label><br>
+            <input type="text" name="details" id="details" value="<%= body.details %>"><br>
+            <label for="email">Your Email</label><br>
+            <input type="email" name="email" id="email" value="<%= body.email %>"><br>
+        <% } else { %>
+            <input type="datetime-local" name="time" id="time" autofocus><br>
+            <label for="details">Box Desciption</label><br>
+            <input type="text" name="details" id="details"><br>
+            <label for="email">Your Email</label><br>
+            <input type="email" name="email" id="email"><br>
+        <% } %>
+        <input type="submit" value="Create Box">
+        <a href="/" class="button">Back</a>
+
+        <%- include ../parts/errors -%>
+    </form>
+</main>   
+         
+<%- include ../parts/footer -%>
