@@ -4,6 +4,9 @@ const bodyParser = require('body-parser')
 const { body, validationResult } = require('express-validator/check')
 const { sanitizeBody } = require('express-validator/filter')
 const { generateBoxCode, formatDate, openBox } = require('./src/functions')
+
+const apiRouter = require('./api/index')
+
 ///////////////////////////////////// DB SETUP ////////////////////////////////////////
 
 // connect to DB and get the port from Heroku environment variables
@@ -33,7 +36,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(express.static('public'))
-
+app.use('/api', apiRouter)
 
 app.set('view engine', 'ejs');
 
@@ -60,25 +63,23 @@ app.get('/newBox', (req, resp) => {
 })
 
 // when a new box is created insert it in the 'box' table
-app.post('/newBoxResult', 
+app.post('/newBox', 
     // body('time', 'The opening time must be in the future').isAfter(Date()),
-    body('email', 'Please specify your email - we will use it to send you the results').not().isIn(['', null, undefined]),
     body('details', 'Sorry, the description is too long').isLength({ max: 255 }),
     sanitizeBody('details').trim().escape(),
-    sanitizeBody('email').trim(),
     (req, resp) => {
         const errors = validationResult(req)
-        if (errors.array().length != 0) {
+        if (!errors.isEmpty()) {
             // re-render the page with errors displaying
             resp.render('pages/newBox', {
                 formErrors: errors.array(), 
                 body: req.body
             })
         } else {
-            var boxCode = generateBoxCode()
-            // convert local time to UTC standard
+            const BOX_CODE = generateBoxCode()
+            // convert local time to epoch time
             const EPOCH_MS = new Date(req.body.time).getTime()
-            let query = `INSERT INTO box(boxCode, openTime, details, email) VALUES ('${boxCode}', '${EPOCH_MS}', '${req.body.details}', '${req.body.email}')`
+            let query = `INSERT INTO box(boxCode, openTime, details) VALUES ('${BOX_CODE}', '${EPOCH_MS}', '${req.body.details}')`
             db.query(query, (err, result) => {
                 if (err) {
                     throw err
@@ -88,15 +89,13 @@ app.post('/newBoxResult',
                         openBox({
                             db: db, 
                             identifier: 'boxCode', 
-                            value: boxCode
+                            value: BOX_CODE
                         }), 
                         new Date().getTime() - EPOCH_MS
                     )
 
-                    // display the result page after a box is added
-                    resp.render('pages/newBoxResult', {
-                        boxCode: boxCode
-                    })
+                    // disply the box page after the box was created
+                    resp.redirect(`/box/${BOX_CODE}`)
                 }
             })
         }
@@ -173,6 +172,10 @@ app.post('/newNoteResult',
 )
 
 ///////////////////////////////////// OPEN BOX ////////////////////////////////////////
+
+app.get('/box/:code', (req, resp) => {
+    resp.redirect(`api/box/${req.params.code}`)
+})
 
 // opening a box
 app.get('/openBox', (req, resp) => {
