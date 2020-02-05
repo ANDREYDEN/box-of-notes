@@ -1,11 +1,12 @@
 <%- include ../parts/header -%>
+
 <main width="80%">
     <% if (loadingError == '') { %>
         <form action="/box/<%= boxCode %>/submit" method="post">
             <h1>New Note</h1>
-            <p>Box Description: <%= fields.description %></p>
+            <p><u>Box Description</u>: <%= fields.description %></p>
 
-            <label>Your Note</label><br>
+            <label>Your Note:</label>
             <textarea name="message" id="note" rows="5" autofocus><%= body.message %></textarea><br>
             <% for (let key in fields) { %>
                 <input type="hidden" name="<%= key %>" value="<%= fields[key] %>">    
@@ -18,4 +19,5 @@
         <h1><%= loadingError %></h1>
     <% } %>            
 </main>
+
 <%- include ../parts/footer -%>

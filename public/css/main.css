@@ -3,13 +3,16 @@
     padding: 0;
 
     font-family: "Garamond";
+    --color-bg1: #0C1821;
+    --color-bg2: #2D3047;
+    --color-sec1: #00A9A5;
+    --color-sec2: #E9B44C;
+    --color-prim2: #FFF333;
+    --border-radius-bg: 10px;
 }
 
 body {
-    background-color: rgb(224, 162, 178);
-}
-
-.page {
+    background-color: var(--color-bg1);
     width: 100%;
     min-height: 100vh;
     display: flex;
@@ -19,10 +22,12 @@ body {
 
 h1 {
     font-size: 3rem;
+    margin: 0.5rem;
 }
 
 h2 {
     font-size: 2rem;
+    margin: 0.25rem;
 }
 
 p {
@@ -31,19 +36,7 @@ p {
 
 a {
     text-decoration: none;
-    color: black;
-}
-
-hr {
-    width: 100%;
-    border: 1px solid gray;
-    border-radius: 4px;
-    box-shadow: none;
-}
-
-.container {
-    box-shadow: 0px 1px 8px gray;
-    border-radius: 0.5rem;
+    color: var(--color-prim2);
 }
 
 /*********************** HEADER ********************/
@@ -59,7 +52,7 @@ header {
 
     margin: 0.5rem;
     padding: 0.5rem;
-    border-radius: .5rem;
+    border-radius: var(--border-radius-bg);
 }
 
 .logo a img {
@@ -68,12 +61,34 @@ header {
 
 /*********************** MAIN ********************/
 
-main {
-    flex-grow: 1;
+main * {
+    color: var(--color-prim2);
 }
 
-main > h1, main > h2 {
-    text-align: center;
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+}
+
+.container {
+    width: 50vw;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    align-self: center;
+    background: var(--color-bg2);
+    border-radius: var(--border-radius-bg);
+}
+
+#starting {
+    width: 50vw;
+    align-self: center;
+    font-size: 5em;
+    border-radius: var(--border-radius-bg) !important;
 }
 
 /*                      RESULTS                   */ 
@@ -87,10 +102,6 @@ main > h1, main > h2 {
     text-align: center;
 }
 
-#boxCode {
-    color: darkcyan;
-}
-
 #open-result {
     display: flex;
     width: 100%;
@@ -99,83 +110,13 @@ main > h1, main > h2 {
 }
 
 .note {
-    height: 10vh;
+    min-height: 10vh;
     font-size: 2rem;
     width: 60%;
     margin: 2rem;
     padding: 1rem;
-}
-
-.note:nth-child(odd) {
-    background-color: lightblue;
-    float: left;
-}
-
-.note:nth-child(even) {
-    background-color: lightgreen;
-    float: right;
-    align-self: flex-end;
-}
-
-/*                      MENU                   */ 
-
-.menu {
-    width: 100%;
-    height: 100vh;
-    text-align: center;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    justify-content: space-evenly;
-}
-
-@media only screen and (max-width: 800px) {
-    /* for phones */
-
-    .menu {
-        flex-direction: column;
-        height: 100vh;
-    }
-
-    .menu-item > svg {
-        height: 60%;
-    }
-}
-
-.menu-item {
-    flex: 1;
-    transition: flex-grow 0.5s ease;
-}
-
-#left {
-    background-color: orange;
-}
-
-#right {
-    background-color: lightblue;
-}
-
-.menu-item:hover {
-    flex-grow: 2;
-}
-
-/*                      FORM                        */
-
-form {
-    background-color: lightblue;
-    padding: 2rem;
-    border: 2px solid black;
-    border-radius: 0.5rem;
-}
-
-.button {
-    margin: 1rem;
-    padding: auto;
-}
-
-.errors {
-    color: red;
-    font-size: 1rem;
+    background-color: var(--color-bg2);
+    border-radius: var(--border-radius-bg);
 }
 
 /*********************** FOOTER ********************/

@@ -1,7 +1,7 @@
 <%- include ../parts/header -%>
     
 <main>
-    <h1><%= box.description %></h1>
+    <h1><%= box.details %></h1>
     <h2><%= box.boxCode %></h2>
     
     <h2>Here's what was inside:</h2>
@@ -10,7 +10,6 @@
             <div class="note"><%= notes[i].message %></div>  
         <% } %>
     </div>
-    <a href="/" class="button">Back to Main Menu</a>
 </main>
     
 <%- include ../parts/footer -%>

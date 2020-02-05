@@ -110,15 +110,7 @@ app.get('/box/:code/submit',
     sanitizeBody('message').trim().escape(),
     (req, resp) => {
         api.getBoxByCode(req.params.code)
-            .then(box => {
-                // check for errors
-                let loadingError = ''
-                if (!box) {
-                    loadingError = "A box with this box code doesn't exist."
-                } else if (box.opened == 1) {
-                    loadingError = "This box has already been opened. You can't add notes to opened boxes."
-                }
-        
+            .then(box => {        
                 resp.render('pages/newNote', {
                     loadingError: loadingError,
                     formErrors: [],
