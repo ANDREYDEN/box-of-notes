@@ -3,8 +3,9 @@ const mysql = require('mysql')
 const bodyParser = require('body-parser')
 const { body, validationResult } = require('express-validator/check')
 const { sanitizeBody } = require('express-validator/filter')
-const { generateBoxCode, formatDate, openBox } = require('./src/functions')
 
+const { generateBoxCode, formatDate, openBox } = require('./src/functions')
+const api = require('./src/api')
 const apiRouter = require('./api/index')
 
 ///////////////////////////////////// DB SETUP ////////////////////////////////////////
@@ -108,29 +109,27 @@ app.post('/box/new',
 app.get('/box/:code/submit', 
     sanitizeBody('message').trim().escape(),
     (req, resp) => {
-        // find a box with specified boxCode
-        let findBoxQuery = `SELECT boxId, details, opened FROM box WHERE boxCode = '${req.params.code}'`
-        db.query(findBoxQuery, (err, box) => {
-            if (err) throw err
-            // check for errors
-            let loadingError = ''
-            if (box.length == 0) {
-                loadingError = "A box with this box code doesn't exist."
-            } else if (box[0].opened == 1) {
-                loadingError = "This box has already been opened. You can't add notes to opened boxes."
-            }
-
-            resp.render('pages/newNote', {
-                loadingError: loadingError,
-                formErrors: [],
-                body: req.body,
-                boxCode: req.params.code,
-                fields: {
-                    boxId: (loadingError == '') ? box[0].boxId : 0,
-                    description: (loadingError == '') ? box[0].details : ''
+        api.getBoxByCode(req.params.code)
+            .then(box => {
+                // check for errors
+                let loadingError = ''
+                if (!box) {
+                    loadingError = "A box with this box code doesn't exist."
+                } else if (box.opened == 1) {
+                    loadingError = "This box has already been opened. You can't add notes to opened boxes."
                 }
+        
+                resp.render('pages/newNote', {
+                    loadingError: loadingError,
+                    formErrors: [],
+                    body: req.body,
+                    boxCode: req.params.code,
+                    fields: {
+                        boxId: (loadingError == '') ? box.boxId : 0,
+                        description: (loadingError == '') ? box.details : ''
+                    }
+                })
             })
-        })
     }
 )
 
@@ -138,115 +137,69 @@ app.post('/box/:code/submit',
     body('message', 'Sorry, your note is too long').isLength({ max: 255 }),
     (req, resp) => {
         // check if the box has been already opened [again]
-        let getBoxQuery = `SELECT opened FROM box WHERE boxId = ${req.body.boxId}`
-        db.query(getBoxQuery, (err, box) => {
-            if (err) throw err
+        api.getBoxByCode(req.params.code)
+            .then(box => {
+                // get general input errors (express-validator)
+                var formErrors = validationResult(req)
 
-            // get general input errors (express-validator)
-            var formErrors = validationResult(req)
+                if (box.opened) {
+                    formErrors.push({ msg: "This box has already been opened. You can't add notes to opened boxes." })
+                }
 
-            if (box[0].opened) {
-                formErrors.push({ msg: "This box has already been opened. You can't add notes to opened boxes." })
-            }
-
-            if (!formErrors.isEmpty()) {
-                // re-render the page displaying the errors
-                resp.render('pages/newNote', {
-                    loadingError: '',
-                    formErrors: formErrors,
-                    body: req.body,
-                    boxCode: req.params.code,
-                    fields: {
-                        boxId: req.body.boxId,
-                        description: req.body.description
-                    }
-                })
-            } else {
-                // add a new note record related to the box found
-                let createNoteQuery = `INSERT INTO note(boxId, message) VALUES (${req.body.boxId}, '${req.body.message}')`
-                db.query(createNoteQuery, (err, result) => {
-                    if (err) throw err
-                    // display the result page after a note is added
-                    resp.render('pages/boxPage', {
-                        box: box[0]
+                if (!formErrors.isEmpty()) {
+                    // re-render the page displaying the errors
+                    resp.render('pages/newNote', {
+                        loadingError: '',
+                        formErrors: formErrors,
+                        body: req.body,
+                        boxCode: req.params.code,
+                        fields: {
+                            boxId: req.body.boxId,
+                            description: req.body.description
+                        }
                     })
-                })
-            }
-        })
+                } else {
+                    // add a new note record related to the box found
+                    let createNoteQuery = `INSERT INTO note(boxId, message) VALUES (${req.body.boxId}, '${req.body.message}')`
+                    db.query(createNoteQuery, (err, result) => {
+                        if (err) throw err
+                        // display the result page after a note is added
+                        resp.render('pages/boxPage', {
+                            box: box
+                        })
+                    })
+                }
+            })
     }
 )
 
 ///////////////////////////////////// BOX PAGE ////////////////////////////////////////
 
 app.get('/box/:code', (req, resp) => {
-    resp.redirect(`/api/box/${req.params.code}`)
-})
-
-// opening a box
-app.get('/openBox', (req, resp) => {
-    resp.render('pages/openBox', {
-        formErrors: []
-    })
+    api.getBoxByCode(req.params.code)
+        .then(box =>
+            resp.render('pages/boxPage', {
+                box: box
+            })
+        )
 })
 
 app.get('/box/:code/content', (req, resp) => {
-
-})
-
-// when a box is opened check the time and display all the notes inside the box if it's available
-app.post('/openBoxResult', 
-    sanitizeBody('boxCode').trim().escape(),
-    (req, resp) => {
-        const formErrors = validationResult(req)
-        if (formErrors.array().length != 0) {
-            // re-render the page with errors displaying
-            resp.render('pages/openBox', { 
-                formErrors: formErrors.array(), 
-                body: req.body 
-            })
-        } else {
-            // find a box with specified boxCode
-            let findBoxQuery = `SELECT boxId, openTime, opened FROM box WHERE boxCode = '${req.body.boxCode}'`
-            db.query(findBoxQuery, (err, box) => {
-                // check for any errors on form
-                let formErrors = []
-
-                if (box.length == 0) {
-                    formErrors.push({ msg: "A box with this box code doesn't exist" })
-                } else {
-                    // check if the box is ready for opening
-                    if (box[0].opened == 0) {
-                        formErrors.push({ msg: `This box will be available on ${formatDate(new Date(box[0].openTime))}` }) 
-                    }
-                }
-
-                if (formErrors.length != 0) {
-                    resp.render('pages/openBox', {
-                        formErrors: formErrors,
-                        body: req.body
-                    })
-                } else {
-                    boxId = box[0].boxId
-
-                    // update the box record in the DB
-                    openBox('boxId', boxId)
-
-                    // find all the notes related to the current box
-                    let getNotesQuery = `SELECT message FROM note WHERE note.boxId = ${boxId}`
-                    db.query(getNotesQuery, (err, result) => {
-                        if (err) throw err
-                        // display the result page after a note is added
-                        resp.render('pages/openBoxResult', {
-                            fields: {
-                                notes: result
-                            }
+    api.getBoxByCode(req.params.code)
+        .then(box => {
+            if (!box.opened) {
+                resp.redirect(`/box/${req.params.code}`)
+            } else {
+                api.getNotesFromBox(req.params.code)
+                    .then(notes => {
+                        resp.render('pages/boxContent', {
+                            box: box,
+                            notes: notes
                         })
                     })
-                }
-            })
-        }
-    }
-)
+            }
+        })
+})
 
 app.listen(process.env.PORT, process.env.HOST, () => {
     console.log('Server started on port ' + PORT)

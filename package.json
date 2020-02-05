@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/ANDREYDEN/box-of-notes#readme",
   "dependencies": {
+    "axios": "^0.19.2",
     "chai": "^4.2.0",
     "chai-url": "^1.0.4",
     "ejs": "^2.5.5",

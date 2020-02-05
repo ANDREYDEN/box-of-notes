@@ -27,4 +27,12 @@ router.get('/box/:code', (req, resp) => {
     })
 })
 
+router.get('/notes/:boxId', (req, resp) => {
+    const query = `SELECT message FROM note WHERE note.boxId = '${req.params.boxId}'`
+    db.query(query, (err, notes) => {
+        if (err) throw err
+        resp.send(notes)
+    })
+})
+
 module.exports = router
