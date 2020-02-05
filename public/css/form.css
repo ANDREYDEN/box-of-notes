@@ -1,8 +1,8 @@
 * {
     --border-width: 2px;
     --border-radius: 5px;
-    --req-color: red;
-    --error-color: rgb(139, 0, 0);
+    --req-color: rgb(255, 0, 0);
+    --error-color: rgb(255, 0, 0);
     --slider-bg: gray;
     --input-color: var(--color-sec1);
     --button-color: var(--color-prim2);
@@ -72,10 +72,21 @@ input[type=button], input[type=submit], button, .button {
     text-align: center;
     
     padding: 0.5rem;
+    margin-bottom: 0.25em;
     border: 0px;
     border-radius: var(--border-radius);
 }
 
 input[type=button]:hover, input[type=submit]:hover, button:hover, .button:hover {
     opacity: 1;
+}
+
+/*********************** ERRORS ********************/
+.errors {
+    list-style-type: none;
+}
+
+.errors > li {
+    font-size: 1em;
+    color: var(--error-color);
 }

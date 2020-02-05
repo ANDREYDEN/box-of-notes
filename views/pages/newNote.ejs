@@ -1,23 +1,18 @@
 <%- include ../parts/header -%>
 
 <main width="80%">
-    <% if (loadingError == '') { %>
-        <form action="/box/<%= boxCode %>/submit" method="post">
-            <h1>New Note</h1>
-            <p><u>Box Description</u>: <%= fields.description %></p>
+    <form action="/box/<%= box.boxCode %>/submit" method="post">
+        <h1>New Note</h1>
+        <p><u>Box Description</u>: <%= box.description %></p>
 
-            <label>Your Note:</label>
-            <textarea name="message" id="note" rows="5" autofocus><%= body.message %></textarea><br>
-            <% for (let key in fields) { %>
-                <input type="hidden" name="<%= key %>" value="<%= fields[key] %>">    
-            <% } %>    
+        <label>Your Note:</label>
+        <textarea name="message" id="note" rows="5" maxlength="255" autofocus><%= body.message %></textarea><br>
 
-            <input type="submit" value="Submit Note">
-            <%- include ../parts/errors -%>
-        </form>
-    <% } else { %>
-        <h1><%= loadingError %></h1>
-    <% } %>            
+        <input type="submit" value="Submit Note">
+        <%- include ../parts/errors -%>
+        <br>
+        <a href="/box/<%= box.boxCode %>">Go to box page</a>     
+    </form>
 </main>
 
 <%- include ../parts/footer -%>

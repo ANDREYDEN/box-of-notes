@@ -4,7 +4,6 @@ const bodyParser = require('body-parser')
 const { body, validationResult } = require('express-validator/check')
 const { sanitizeBody } = require('express-validator/filter')
 
-const { generateBoxCode, formatDate, openBox } = require('./src/functions')
 const api = require('./src/api')
 const apiRouter = require('./api/index')
 
@@ -77,28 +76,19 @@ app.post('/box/new',
                 body: req.body
             })
         } else {
-            const BOX_CODE = generateBoxCode()
             // convert local time to epoch time
             const EPOCH_MS = new Date(req.body.time).getTime()
-            let query = `INSERT INTO box(boxCode, openTime, details) VALUES ('${BOX_CODE}', '${EPOCH_MS}', '${req.body.details}')`
-            db.query(query, (err, result) => {
-                if (err) {
-                    throw err
-                } else {
+            api.createBox(EPOCH_MS, req.body.details)
+                .then(boxCode => {
                     // schedule the opening of the box for the specified time
                     setTimeout(() =>
-                        openBox({
-                            db: db, 
-                            identifier: 'boxCode', 
-                            value: BOX_CODE
-                        }), 
+                        api.openBoxByCode(boxCode), 
                         EPOCH_MS - new Date().getTime()
                     )
 
-                    // disply the box page after the box was created
-                    resp.redirect(`/box/${BOX_CODE}`)
-                }
-            })
+                    // display the box page after the box was created
+                    resp.redirect(`/box/${boxCode}`)
+                })
         }
     }
 )
@@ -107,60 +97,36 @@ app.post('/box/new',
 
 // when a new Note is added check the boxCode and link it to a corresponding box
 app.get('/box/:code/submit', 
-    sanitizeBody('message').trim().escape(),
+    sanitizeBody('message').trim(),
     (req, resp) => {
         api.getBoxByCode(req.params.code)
-            .then(box => {        
+            .then(box => {
+                console.log(box);
                 resp.render('pages/newNote', {
-                    loadingError: loadingError,
                     formErrors: [],
                     body: req.body,
-                    boxCode: req.params.code,
-                    fields: {
-                        boxId: (loadingError == '') ? box.boxId : 0,
-                        description: (loadingError == '') ? box.details : ''
-                    }
+                    box: box,
                 })
             })
     }
 )
 
 app.post('/box/:code/submit', 
-    body('message', 'Sorry, your note is too long').isLength({ max: 255 }),
     (req, resp) => {
-        // check if the box has been already opened [again]
-        api.getBoxByCode(req.params.code)
-            .then(box => {
-                // get general input errors (express-validator)
-                var formErrors = validationResult(req)
-
-                if (box.opened) {
-                    formErrors.push({ msg: "This box has already been opened. You can't add notes to opened boxes." })
-                }
-
-                if (!formErrors.isEmpty()) {
-                    // re-render the page displaying the errors
-                    resp.render('pages/newNote', {
-                        loadingError: '',
-                        formErrors: formErrors,
-                        body: req.body,
-                        boxCode: req.params.code,
-                        fields: {
-                            boxId: req.body.boxId,
-                            description: req.body.description
-                        }
-                    })
-                } else {
-                    // add a new note record related to the box found
-                    let createNoteQuery = `INSERT INTO note(boxId, message) VALUES (${req.body.boxId}, '${req.body.message}')`
-                    db.query(createNoteQuery, (err, result) => {
-                        if (err) throw err
-                        // display the result page after a note is added
-                        resp.render('pages/boxPage', {
-                            box: box
+        api.createNote(req.params.code, req.body.message)
+            .then(res => {
+                resp.redirect(`/box/${req.params.code}`)
+            })
+            .catch(err => {
+                api.getBoxByCode(req.params.code)
+                    .then(box => {
+                        // re-render the page displaying the errors
+                        resp.render('pages/newNote', {
+                            formErrors: [err.message],
+                            body: req.body,
+                            box: box,
                         })
                     })
-                }
             })
     }
 )
@@ -169,11 +135,7 @@ app.post('/box/:code/submit',
 
 app.get('/box/:code', (req, resp) => {
     api.getBoxByCode(req.params.code)
-        .then(box =>
-            resp.render('pages/boxPage', {
-                box: box
-            })
-        )
+        .then(box => resp.render('pages/boxPage', { box: box }))
 })
 
 app.get('/box/:code/content', (req, resp) => {

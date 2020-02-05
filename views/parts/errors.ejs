@@ -1,5 +1,5 @@
-<div class="errors">
+<ul class="errors">
     <% for (let i = 0; i < formErrors.length; i++) { %>
-        <p><%= formErrors[i].msg %></p><br>
+        <li><%= formErrors[i] %></li>
     <% } %>
-</div>
+</ul>

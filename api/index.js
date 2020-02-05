@@ -19,20 +19,51 @@ db.connect((err) => {
 
 const router = express.Router()
 
-router.get('/box/:code', (req, resp) => {
-    const query = `SELECT * FROM box WHERE boxCode = '${req.params.code}'`
-    db.query(query, (err, box) => {
+// create a new box
+router.post('/boxes', (req, resp) => {
+    const query = `INSERT INTO box(boxCode, openTime, details) VALUES (?, ?, ?)`
+    db.query(query, [req.body.boxCode, req.body.openTime, req.body.details], (err, res) => {
         if (err) throw err
-        resp.send(box)
+        resp.send(true)
     })
 })
 
-router.get('/notes/:boxId', (req, resp) => {
-    const query = `SELECT message FROM note WHERE note.boxId = '${req.params.boxId}'`
-    db.query(query, (err, notes) => {
+router.route('/boxes/:boxCode')
+    // get box by box code
+    .get((req, resp) => {
+        const query = `SELECT * FROM box WHERE boxCode = ?`
+        db.query(query, [req.params.boxCode], (err, box) => {
+            if (err) throw err
+            resp.send(box)
+        })
+    })
+    // open box by box code
+    .put((req, resp) => {
+        const query = `UPDATE box SET opened = 1 WHERE boxCode = ?`
+        db.query(query, [req.params.boxCode], (err, res) => {
+            if (err) throw err
+            resp.send(true)
+        })
+    })
+
+// get notes from box 
+router.get('/boxes/:boxCode/notes', (req, resp) => {
+    const query = `SELECT * FROM note WHERE note.boxCode = ?`
+    db.query(query, [req.params.boxCode], (err, notes) => {
         if (err) throw err
         resp.send(notes)
     })
 })
+
+// create note
+router.post('/notes', (req,resp) => {
+    const query = `INSERT INTO note(boxCode, message) VALUES (?, ?)`
+    db.query(query, [req.body.boxCode, req.body.message], (err, res) => {
+        if (err) throw err
+        resp.send(true)
+    })
+})
+
+
 
 module.exports = router

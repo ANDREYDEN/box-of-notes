@@ -13,19 +13,10 @@ const generateBoxCode = () => {
 // formats the date to 'ddd mm dd, yyyy'
 const formatDate = date => date.toString().split(' ').slice(1, 5).join(' ')
 
-// changes the 'opened' property to 1 in the db record with the specified (identifier, value) pair
-const openBox = ({ db, identifier, value }) => {
-    if (typeof (value) == 'string') value = `'${value}'`
-
-    let query = `UPDATE box SET opened = 1 WHERE ${identifier} = ${value}`
-    console.log(`Query: ${query}`)
-    db.query(query, (err, result) => {
-        if (err) throw err
-    })
-}
+const getEpochMs = () => new Date().getTime()
 
 module.exports = {
     generateBoxCode: generateBoxCode,
     formatDate: formatDate,
-    openBox: openBox
+    getEpochMs: getEpochMs
 }
