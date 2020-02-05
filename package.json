@@ -1,5 +1,5 @@
 {
-  "name": "BoxOfNotes",
+  "name": "box_of_notes",
   "version": "1.0.0",
   "description": "A secure digital box of notes",
   "main": "index.js",
