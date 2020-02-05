@@ -1,0 +1,14 @@
+<%- include ../parts/header -%>
+    
+<main>
+    <h1><%= box.details %></h1>
+    <h2><%= box.boxCode %></h2>
+    <% if (box.opened) { %>
+        <a href="/box/<%= box.boxCode %>/content">See inside</a>
+    <% } else { %>
+        <a href="/box/<%= box.boxCode %>/submit">Submit note</a>
+    <% } %>
+    <a href="/" class="button">Back to Main Menu</a>
+</main>
+    
+<%- include ../parts/footer -%>
