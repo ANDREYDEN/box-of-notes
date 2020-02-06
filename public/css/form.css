@@ -1,11 +1,12 @@
 * {
-    --border-width: 2px;
+    --border-width: 1.5px;
     --border-radius: 5px;
     --req-color: rgb(255, 0, 0);
     --error-color: rgb(255, 0, 0);
     --slider-bg: gray;
-    --input-color: var(--color-sec1);
-    --button-color: var(--color-prim2);
+    /* --input-color: linear-gradient(45deg, var(--color-prim2) 50%, var(--color-prim1));var(--color-prim2); */
+    --input-color: var(--color-prim2);
+    --button-color: var(--color-prim1);
     --button-border-color: var(--color-sec2);
 }
 
@@ -17,27 +18,14 @@ hr {
 
 /*********************** FORM ********************/
 
-form {
-    padding: 2em;
-    border-radius: 25px;
-    color: var(--color-prim2);
-    background-color: var(--color-bg2);
-    margin: auto;
-    width: 50%;
-}
-
-form * {
-    font-size: 1.5em;
-}
-
 form h1 {
     font-size: 2em;
-    text-align: center;
+    color: var(--color-prim1);
 }
 
-form h2 {
+form h2, form label {
     font-size: 1.5em;
-    text-align: center;
+    color: var(--color-text);
 }
 
 req {
@@ -50,30 +38,45 @@ label {
     display: block;
 }
 
+input, button, .button, textarea {
+    font-size: 1.5rem;
+    padding: 0.5rem;
+}
 
 /*********************** TEXT INPUT ********************/
 
-input[type=text], input[type=datetime-local], textarea {
+input, textarea {
     width: 50%;
-    padding: 0.25em;
     margin-bottom: 1em;
     outline: none;
-    border: var(--border-width) solid var(--input-color);
+    color: var(--color-text);
+    opacity: 0.9;
+    border: var(--border-width) solid var(--color-prim1);
     border-radius: var(--border-radius);
-    background-color: var(--input-color);
+    background: var(--input-color);
+}
+
+input:focus, textarea:focus {
+    opacity: 1;
+}
+
+textarea {
+    resize: none;
+    height: 3em;
 }
 
 /*********************** BUTTON ********************/
 
 input[type=button], input[type=submit], button, .button {
-    color: #000;
+    color: var(--color-bg1);
+    opacity: 0.9;
     background-color: var(--button-color);
     cursor: pointer;
     text-align: center;
+    font-size: 1.5rem;
     
-    padding: 0.5rem;
     margin-bottom: 0.25em;
-    border: 0px;
+    border: 0;
     border-radius: var(--border-radius);
 }
 

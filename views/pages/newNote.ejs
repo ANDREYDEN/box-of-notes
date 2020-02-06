@@ -1,17 +1,17 @@
 <%- include ../parts/header -%>
 
-<main width="80%">
-    <form action="/box/<%= box.boxCode %>/submit" method="post">
+<main>
+    <form class="container" action="/box/<%= box.boxCode %>/submit" method="post">
         <h1>New Note</h1>
-        <p><u>Box Description</u>: <%= box.description %></p>
+        <h2><u>Box Description</u>: <%= box.description %></h2>
 
         <label>Your Note:</label>
-        <textarea name="message" id="note" rows="5" maxlength="255" autofocus><%= body.message %></textarea><br>
+        <textarea name="message" id="note" rows="10" maxlength="255" autofocus><%= body.message %></textarea><br>
 
         <input type="submit" value="Submit Note">
         <%- include ../parts/errors -%>
         <br>
-        <a href="/box/<%= box.boxCode %>">Go to box page</a>     
+        <a class="button" href="/box/<%= box.boxCode %>">Go to box page</a>     
     </form>
 </main>
 

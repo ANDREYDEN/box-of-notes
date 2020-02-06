@@ -4,10 +4,10 @@
 
     font-family: "Garamond";
     --color-bg1: #0C1821;
-    --color-bg2: #2D3047;
-    --color-sec1: #00A9A5;
-    --color-sec2: #E9B44C;
-    --color-prim2: #FFF333;
+    --color-prim1: #FFFF44;
+    --color-prim2: #00A5A5;
+    --color-text: #ffffff;
+    --color-sec: #777777;
     --border-radius-bg: 10px;
 }
 
@@ -22,12 +22,14 @@ body {
 
 h1 {
     font-size: 3rem;
-    margin: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-prim1);
 }
 
 h2 {
     font-size: 2rem;
-    margin: 0.25rem;
+    margin-bottom: 0.25rem;
+    color: var(--color-prim1);
 }
 
 p {
@@ -36,6 +38,11 @@ p {
 
 a {
     color: var(--color-prim2);
+    font-size: 1.25rem;
+}
+
+a.button {
+    text-decoration: none;
 }
 
 /*********************** HEADER ********************/
@@ -60,10 +67,6 @@ header {
 
 /*********************** MAIN ********************/
 
-main * {
-    color: var(--color-prim2);
-}
-
 main {
     flex-grow: 1;
     display: flex;
@@ -73,14 +76,10 @@ main {
 }
 
 .container {
-    width: 50vw;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-content: flex-start;
-    align-self: center;
-    background: var(--color-bg2);
-    border-radius: var(--border-radius-bg);
+    padding: 1rem 0 1rem 20vw;
+    border: 1px solid var(--color-prim1);
+    border-left: none;
+    border-right: none;
 }
 
 #starting {
@@ -88,6 +87,7 @@ main {
     align-self: center;
     font-size: 5em;
     border-radius: var(--border-radius-bg) !important;
+    text-decoration: none;
 }
 
 /*                      RESULTS                   */ 
@@ -129,19 +129,19 @@ footer {
     text-align: center;
 }
 
-footer #contacts {
+#contacts {
     width: 30%;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
     margin: auto;
 }
 
-footer #contacts > a > img {
-    width: 50px;
-    margin: 0 1rem; 
+#contacts > a > img {
+    width: 30px;
+    margin: 0 0.5rem; 
 }
 
-footer #copyright {
+#copyright {
     margin-top: 1rem;
 }

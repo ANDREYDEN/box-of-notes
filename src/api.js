@@ -35,7 +35,7 @@ const createBox = (openTime, details) => {
         openTime: openTime,
         details: details
     })
-        .then(resp => BOX_CODE)
+        .then(resp => BOX_CODE) 
         .catch(err => { throw err })
 }
 

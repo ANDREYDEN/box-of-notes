@@ -2,9 +2,9 @@
     
 <main>
     <div class="container">
-        <h1>Box</h1>
-        <h1><u>Description</u>: <%= box.details %></h1>
-        <h2><u>Code</u>: <%= box.boxCode %></h2>
+        <h1>Box &lt<%= box.boxCode %>&gt</h1>
+        <h2>Description: <%= box.details %></h2>
+        <h2>Opening Time: <%= new Date(box.openTime).toString().substr(0, 24) %></h2>
         <% if (box.opened) { %>
             <a class="button" href="/box/<%= box.boxCode %>/content">See inside</a class="button">
         <% } else { %>
