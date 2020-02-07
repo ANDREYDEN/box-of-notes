@@ -7,14 +7,14 @@
         <label for="time">Opening Time</label>
         <% if (locals.body) {%>
             <input type="datetime-local" name="time" id="time" value="<%= body.time %>" autofocus><br>
-            <label for="details">Box Desciption</label>
+            <label for="details">Box Description</label>
             <textarea name="details" id="details" rows="10" maxlength="255" value="<%= body.details %>"></textarea><br>
         <% } else { %>
             <input type="datetime-local" name="time" id="time" autofocus><br>
             <label for="details">Box Description</label>
             <textarea name="details" id="details"></textarea><br>
         <% } %>
-        <input type="submit" value="Create Box">
+        <button type="submit">Create Box</button>
 
         <%- include ../parts/errors -%>
     </form>

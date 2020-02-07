@@ -1,31 +1,19 @@
 * {
-    --border-width: 1.5px;
+    --border-width: 1px;
     --border-radius: 5px;
     --req-color: rgb(255, 0, 0);
     --error-color: rgb(255, 0, 0);
-    --slider-bg: gray;
-    /* --input-color: linear-gradient(45deg, var(--color-prim2) 50%, var(--color-prim1));var(--color-prim2); */
-    --input-color: var(--color-prim2);
-    --button-color: var(--color-prim1);
-    --button-border-color: var(--color-sec2);
-}
-
-hr {
-    border-width: 2px;
-    margin-bottom: 1em;
-    margin-top: 1em;
+    --input-color: var(--color-bg2);
+    --button-color: var(--color-bg2);
+    --button-border-color: var(--color-primary);
 }
 
 /*********************** FORM ********************/
 
-form h1 {
-    font-size: 2em;
-    color: var(--color-prim1);
-}
-
-form h2, form label {
-    font-size: 1.5em;
+form label {
     color: var(--color-text);
+    font-family: var(--font-title);
+    font-size: 2em;
 }
 
 req {
@@ -34,54 +22,55 @@ req {
 }
 
 label {
-    margin-bottom: 0.25em;
     display: block;
+    margin-bottom: 0.25em;
 }
 
 input, button, .button, textarea {
-    font-size: 1.5rem;
-    padding: 0.5rem;
+    padding: 0.5em;
+    font-size: 1em;
 }
 
 /*********************** TEXT INPUT ********************/
 
 input, textarea {
-    width: 50%;
+    background: var(--color-bg3);
+    border: 0;
+    border-radius: 5px;
+    color: var(--color-text2);
+    font-family: var(--font-text);
     margin-bottom: 1em;
     outline: none;
-    color: var(--color-text);
-    opacity: 0.9;
-    border: var(--border-width) solid var(--color-prim1);
-    border-radius: var(--border-radius);
-    background: var(--input-color);
-}
-
-input:focus, textarea:focus {
-    opacity: 1;
+    padding: 0.5em;
 }
 
 textarea {
+    height: 4rem;
     resize: none;
-    height: 3em;
+}
+
+*::placeholder {
+  color: var(--color-text3);
 }
 
 /*********************** BUTTON ********************/
 
 input[type=button], input[type=submit], button, .button {
-    color: var(--color-bg1);
-    opacity: 0.9;
-    background-color: var(--button-color);
+    background: var(--color-bg3);
+    /* border: none; */
+    border: 1px solid var(--color-primary);
+    border-radius: 5px;
+    color: var(--color-primary);
     cursor: pointer;
-    text-align: center;
-    font-size: 1.5rem;
-    
-    margin-bottom: 0.25em;
-    border: 0;
-    border-radius: var(--border-radius);
+    font-family: var(--font-text);
+    outline: none;
+    padding: 0.5em;
+    transition: 0.4s;
 }
 
 input[type=button]:hover, input[type=submit]:hover, button:hover, .button:hover {
-    opacity: 1;
+    background: var(--color-primary);
+    color: var(--color-bg3);    
 }
 
 /*********************** ERRORS ********************/
@@ -90,6 +79,5 @@ input[type=button]:hover, input[type=submit]:hover, button:hover, .button:hover 
 }
 
 .errors > li {
-    font-size: 1em;
     color: var(--error-color);
 }
