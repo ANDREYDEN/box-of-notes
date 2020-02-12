@@ -6,11 +6,10 @@
         <h2><u>Box Description</u>: <%= box.description %></h2>
 
         <label>Your Note:</label>
-        <textarea name="message" id="note" rows="10" maxlength="255" autofocus><%= body.message %></textarea><br>
+        <textarea name="message" id="note" rows="10" maxlength="255" autofocus><%= body.message %></textarea>
 
-        <input type="submit" value="Submit Note">
         <%- include ../parts/errors -%>
-        <br>
+        <input type="submit" value="Submit Note">
         <a class="button" href="/box/<%= box.boxCode %>">Go to box page</a>     
     </form>
 </main>

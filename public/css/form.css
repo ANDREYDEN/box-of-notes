@@ -1,8 +1,8 @@
 * {
     --border-width: 1px;
     --border-radius: 5px;
-    --req-color: rgb(255, 0, 0);
-    --error-color: rgb(255, 0, 0);
+    --req-color: #f00;
+    --error-color: #f00;
     --input-color: var(--color-bg2);
     --button-color: var(--color-bg2);
     --button-border-color: var(--color-primary);
@@ -10,19 +10,16 @@
 
 /*********************** FORM ********************/
 
-form label {
-    color: var(--color-text);
-    font-family: var(--font-title);
-    font-size: 2em;
-}
-
 req {
     color: var(--req-color);
     font-size: 1.5em;
 }
 
 label {
+    color: var(--color-text);
     display: block;
+    font-family: var(--font-title);
+    font-size: 2em;
     margin-bottom: 0.25em;
 }
 
@@ -37,9 +34,10 @@ input, textarea {
     background: var(--color-bg3);
     border: 0;
     border-radius: 5px;
+    box-shadow: 0 0 4px #000;
     color: var(--color-text2);
     font-family: var(--font-text);
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
     outline: none;
     padding: 0.5em;
 }
@@ -66,16 +64,18 @@ input[type=button], input[type=submit], button, .button {
     outline: none;
     padding: 0.5em;
     transition: 0.4s;
+    text-align: center;
 }
 
 input[type=button]:hover, input[type=submit]:hover, button:hover, .button:hover {
     background: var(--color-primary);
-    color: var(--color-bg3);    
+    color: var(--color-bg2);    
 }
 
 /*********************** ERRORS ********************/
 .errors {
     list-style-type: none;
+    margin: 0.25em 0;
 }
 
 .errors > li {
