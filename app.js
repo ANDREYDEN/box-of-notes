@@ -1,8 +1,11 @@
+const dotenv = require('dotenv')
 const express = require('express')
 const mysql = require('mysql')
 const bodyParser = require('body-parser')
 const { body, validationResult } = require('express-validator/check')
 const { sanitizeBody } = require('express-validator/filter')
+
+dotenv.config()
 
 const api = require('./src/api')
 const apiRouter = require('./api/index')
