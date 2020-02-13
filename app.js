@@ -7,13 +7,10 @@ const { sanitizeBody } = require('express-validator/filter')
 
 dotenv.config()
 
-const api = require('./src/api')
+const Api = require('./src/api')
 const apiRouter = require('./api/index')
 const { epochToDate } = require('./src/functions')
 ///////////////////////////////////// DB SETUP ////////////////////////////////////////
-
-// connect to DB and get the port from Heroku environment variables
-const PORT = process.env.PORT || '8000'
 
 const DB_URL = process.env.DATABASE_URL
 const DB_URL_PARTS = DB_URL.split(/[:\/@?]/)
@@ -42,6 +39,8 @@ app.use(express.static('public'))
 app.use('/api', apiRouter)
 
 app.set('view engine', 'ejs');
+
+const api = new Api()
 
 ////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////// PAGES ////////////////////////////////////////
@@ -77,16 +76,7 @@ app.post('/box/new',
             // convert local time to epoch time
             const EPOCH_MS = new Date(req.body.time).getTime()
             api.createBox(EPOCH_MS, req.body.details)
-                .then(boxCode => {
-                    // schedule the opening of the box for the specified time
-                    setTimeout(() =>
-                        api.openBoxByCode(boxCode), 
-                        EPOCH_MS - new Date().getTime()
-                    )
-
-                    // display the box page after the box was created
-                    resp.redirect(`/box/${boxCode}`)
-                })
+                .then(boxCode => resp.redirect(`/box/${boxCode}`))
         }
     }
 )
@@ -99,7 +89,6 @@ app.get('/box/:code/submit',
     (req, resp) => {
         api.getBoxByCode(req.params.code)
             .then(box => {
-                console.log(box);
                 resp.render('pages/newNote', {
                     formErrors: [],
                     body: req.body,
@@ -159,5 +148,5 @@ app.get('/box/:code/content', (req, resp) => {
 })
 
 app.listen(process.env.PORT, process.env.HOST, () => {
-    console.log('Server started on port ' + PORT)
+    console.log('Server started on port ' + process.env.PORT)
 })

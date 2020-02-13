@@ -37,14 +37,6 @@ router.route('/boxes/:boxCode')
             resp.send(box)
         })
     })
-    // open box by box code
-    .put((req, resp) => {
-        const query = `UPDATE box SET opened = 1 WHERE boxCode = ?`
-        db.query(query, [req.params.boxCode], (err, res) => {
-            if (err) throw err
-            resp.send(true)
-        })
-    })
 
 // get notes from box 
 router.get('/boxes/:boxCode/notes', (req, resp) => {
@@ -63,7 +55,5 @@ router.post('/notes', (req,resp) => {
         resp.send(true)
     })
 })
-
-
 
 module.exports = router

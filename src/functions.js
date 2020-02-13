@@ -11,11 +11,9 @@ const generateBoxCode = () => {
 }
 
 // formats the date to 'ddd mm dd, yyyy'
-const epochToDate = ms => {
-    console.log(new Date(ms).toString().split(' ').slice(1, 5).join(' '));
-    return new Date(ms).toString().split(' ').slice(1, 5).join(' ')
-}
+const epochToDate = ms => new Date(ms).toString().split(' ').slice(1, 5).join(' ')
 
+// get the number of milliseconds since Epoch (1970)
 const getEpochMs = () => new Date().getTime()
 
 module.exports = {
