@@ -11,12 +11,15 @@ const generateBoxCode = () => {
 }
 
 // formats the date to 'ddd mm dd, yyyy'
-const formatDate = date => date.toString().split(' ').slice(1, 5).join(' ')
+const epochToDate = ms => {
+    console.log(new Date(ms).toString().split(' ').slice(1, 5).join(' '));
+    return new Date(ms).toString().split(' ').slice(1, 5).join(' ')
+}
 
 const getEpochMs = () => new Date().getTime()
 
 module.exports = {
     generateBoxCode: generateBoxCode,
-    formatDate: formatDate,
+    epochToDate: epochToDate,
     getEpochMs: getEpochMs
 }

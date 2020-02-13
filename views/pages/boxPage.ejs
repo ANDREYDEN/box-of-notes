@@ -6,7 +6,7 @@
         <h2>Description:</h2>
         <p><%= box.details %></p>
         <h2>Opening Time:</h2>
-        <p><%= new Date(box.openTime).toString().substr(0, 24) %></p>
+        <p><%= formatedDate %></p>
         <br>
         <% if (box.opened) { %>
             <a class="button" href="/box/<%= box.boxCode %>/content">See inside</a class="button">

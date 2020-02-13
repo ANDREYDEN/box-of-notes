@@ -9,7 +9,7 @@ dotenv.config()
 
 const api = require('./src/api')
 const apiRouter = require('./api/index')
-
+const { epochToDate } = require('./src/functions')
 ///////////////////////////////////// DB SETUP ////////////////////////////////////////
 
 // connect to DB and get the port from Heroku environment variables
@@ -133,7 +133,12 @@ app.post('/box/:code/submit',
 
 app.get('/box/:code', (req, resp) => {
     api.getBoxByCode(req.params.code)
-        .then(box => resp.render('pages/boxPage', { box: box }))
+        .then(box => 
+            resp.render('pages/boxPage', { 
+                box: box, 
+                formatedDate: epochToDate(box.openTime) 
+            })
+        )
 })
 
 app.get('/box/:code/content', (req, resp) => {
