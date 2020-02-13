@@ -10,14 +10,10 @@ const generateBoxCode = () => {
     return boxCode
 }
 
-// formats the date to 'ddd mm dd, yyyy'
-const epochToDate = ms => new Date(ms).toString().split(' ').slice(1, 5).join(' ')
-
 // get the number of milliseconds since Epoch (1970)
 const getEpochMs = () => new Date().getTime()
 
 module.exports = {
     generateBoxCode: generateBoxCode,
-    epochToDate: epochToDate,
     getEpochMs: getEpochMs
 }

@@ -9,7 +9,6 @@ dotenv.config()
 
 const Api = require('./src/api')
 const apiRouter = require('./api/index')
-const { epochToDate } = require('./src/functions')
 ///////////////////////////////////// DB SETUP ////////////////////////////////////////
 
 const DB_URL = process.env.DATABASE_URL
@@ -123,17 +122,14 @@ app.post('/box/:code/submit',
 app.get('/box/:code', (req, resp) => {
     api.getBoxByCode(req.params.code)
         .then(box => 
-            resp.render('pages/boxPage', { 
-                box: box, 
-                formatedDate: epochToDate(box.openTime) 
-            })
+            resp.render('pages/boxPage', { box: box })
         )
 })
 
 app.get('/box/:code/content', (req, resp) => {
     api.getBoxByCode(req.params.code)
         .then(box => {
-            if (!box.opened) {
+            if (!box.isOpened()) {
                 resp.redirect(`/box/${req.params.code}`)
             } else {
                 api.getNotesFromBox(req.params.code)

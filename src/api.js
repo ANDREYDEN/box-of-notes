@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-const { generateBoxCode, formatDate, getEpochMs } = require('./functions')
+const { generateBoxCode } = require('./functions')
 const Box = require('./box')
 
 class Api {

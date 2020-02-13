@@ -6,9 +6,9 @@
         <h2>Description:</h2>
         <p><%= box.details %></p>
         <h2>Opening Time:</h2>
-        <p><%= formatedDate %></p>
+        <p><%= box.formatedDate %></p>
         <br>
-        <% if (box.opened) { %>
+        <% if (box.isOpened()) { %>
             <a class="button" href="/box/<%= box.boxCode %>/content">See inside</a class="button">
         <% } else { %>
             <a class="button" href="/box/<%= box.boxCode %>/submit">Submit note</a>
