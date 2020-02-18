@@ -119,11 +119,12 @@ app.post('/box/:code/submit',
 
 ///////////////////////////////////// BOX PAGE ////////////////////////////////////////
 
-app.get('/box/:code', (req, resp) => {
+app.get('/box/:code', (req, resp, next) => {
     api.getBoxByCode(req.params.code)
         .then(box => 
             resp.render('pages/boxPage', { box: box })
         )
+        .catch(err => { next(err) })
 })
 
 app.get('/box/:code/content', (req, resp) => {
@@ -141,6 +142,14 @@ app.get('/box/:code/content', (req, resp) => {
                     })
             }
         })
+})
+
+///////////////////////////////////// ERRORS AND LISTENING ////////////////////////////////////////
+
+app.use(function (err, req, resp, next) {
+    console.error(err.stack);
+    console.log(err);
+    resp.render('pages/error', { message: err.response.data })
 })
 
 app.listen(process.env.PORT, process.env.HOST, () => {

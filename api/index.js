@@ -28,15 +28,19 @@ router.post('/boxes', (req, resp) => {
     })
 })
 
-router.route('/boxes/:boxCode')
-    // get box by box code
-    .get((req, resp) => {
-        const query = `SELECT * FROM box WHERE boxCode = ?`
-        db.query(query, [req.params.boxCode], (err, box) => {
-            if (err) throw err
-            resp.send(box)
-        })
+// get box by box code
+router.get('/boxes/:boxCode', (req, resp) => {
+    const query = `SELECT * FROM box WHERE boxCode = ?`
+    db.query(query, [req.params.boxCode], (err, boxes) => {
+        if (err) {
+            resp.status(500).send(err)
+        } else if (boxes.length == 0){
+            resp.status(502).send('Box does not exist')
+        } else {
+            resp.send(boxes[0])
+        }
     })
+})
 
 // get notes from box 
 router.get('/boxes/:boxCode/notes', (req, resp) => {

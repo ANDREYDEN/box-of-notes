@@ -13,9 +13,12 @@ class Api {
             }
         })
     }
+
     getBoxByCode(boxCode) {
         return this.instance.get(`/boxes/${boxCode}`)
-            .then(resp => resp.data ? new Box(resp.data[0]) : null)
+            .then(resp => {
+                resp.data ? new Box(resp.data) : null
+            })
             .catch(err => { throw err })
         }
         
