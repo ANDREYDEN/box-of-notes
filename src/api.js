@@ -20,6 +20,10 @@ class Api {
         throw err
     }
 
+    /* Returns a box with the specified code. If no box was found throws an Error.
+     * @param {string} boxCode - the code of the box to look for
+     * @returns {Promise(Box)} - the box found
+     */
     getBoxByCode(boxCode) {
         return this.instance.get(`/boxes/${boxCode}`)
             .then(resp => {
@@ -32,6 +36,10 @@ class Api {
             .catch(Api.handleError)
     }
 
+    /* Returns a list of notes inside the box with the specified code.
+    * @param {string} boxCode - the code of the box to look inside
+    * @returns {Promise(Box)} - the box found
+    */
     getNotesFromBox(boxCode) {
         return this.instance.get(`/boxes/${boxCode}/notes`)
             .then(resp => resp.data.map(jsonNote => new Note(jsonNote)))

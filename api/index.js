@@ -35,7 +35,7 @@ router.get('/boxes/:boxCode', (req, resp) => {
         if (err) {
             resp.status(500).send(err)
         } else if (boxes.length == 0) {
-            resp.status(502).send('Box does not exist')
+            resp.status(502).send('The box you are trying to access does not exist')
         } else {
             resp.send(boxes[0])
         }
@@ -46,8 +46,11 @@ router.get('/boxes/:boxCode', (req, resp) => {
 router.get('/boxes/:boxCode/notes', (req, resp) => {
     const query = `SELECT * FROM note WHERE boxCode = ?`
     db.query(query, [req.params.boxCode], (err, notes) => {
-        if (err) throw err
-        resp.send(notes)
+        if (err) {
+            resp.status(500).send(err)
+        } else {
+            resp.send(notes)
+        }
     })
 })
 

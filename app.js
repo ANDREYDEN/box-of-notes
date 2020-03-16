@@ -63,7 +63,7 @@ app.post('/box/new',
     // body('time', 'The opening time must be in the future').isAfter(Date()),
     body('details', 'Sorry, the description is too long').isLength({ max: 255 }),
     sanitizeBody('details').trim().escape(),
-    (req, resp) => {
+    (req, resp, next) => {
         const errors = validationResult(req)
         if (!errors.isEmpty()) {
             // re-render the page with errors displaying
@@ -76,6 +76,7 @@ app.post('/box/new',
             const EPOCH_MS = new Date(req.body.time).getTime()
             api.createBox(EPOCH_MS, req.body.details)
                 .then(boxCode => resp.redirect(`/box/${boxCode}`))
+                .catch(err => next(err))
         }
     }
 )
@@ -85,7 +86,7 @@ app.post('/box/new',
 // when a new Note is added check the boxCode and link it to a corresponding box
 app.get('/box/:code/submit',
     sanitizeBody('message').trim(),
-    (req, resp) => {
+    (req, resp, next) => {
         api.getBoxByCode(req.params.code)
             .then(box => {
                 resp.render('pages/newNote', {
@@ -94,11 +95,12 @@ app.get('/box/:code/submit',
                     box: box,
                 })
             })
+            .catch(err => next(err))
     }
 )
 
 app.post('/box/:code/submit',
-    (req, resp) => {
+    (req, resp, next) => {
         api.createNote(req.params.code, req.body.message)
             .then(res => {
                 resp.redirect(`/box/${req.params.code}`)
@@ -113,6 +115,7 @@ app.post('/box/:code/submit',
                             box: box,
                         })
                     })
+                    .catch(err => next(err))
             })
     }
 )
@@ -124,10 +127,10 @@ app.get('/box/:code', (req, resp, next) => {
         .then(box =>
             resp.render('pages/boxPage', { box: box })
         )
-        .catch(err => { next(err) })
+        .catch(err => next(err))
 })
 
-app.get('/box/:code/content', (req, resp) => {
+app.get('/box/:code/content', (req, resp, next) => {
     api.getBoxByCode(req.params.code)
         .then(box => {
             if (!box.isOpened()) {
@@ -140,8 +143,10 @@ app.get('/box/:code/content', (req, resp) => {
                             notes: notes
                         })
                     })
+                    .catch(err => next(err))
             }
         })
+        .catch(err => next(err))
 })
 
 ///////////////////////////////////// ERRORS AND LISTENING ////////////////////////////////////////
