@@ -59,7 +59,7 @@ app.get('/box/new', (req, resp) => {
 })
 
 // when a new box is created insert it in the 'box' table
-app.post('/box/new', 
+app.post('/box/new',
     // body('time', 'The opening time must be in the future').isAfter(Date()),
     body('details', 'Sorry, the description is too long').isLength({ max: 255 }),
     sanitizeBody('details').trim().escape(),
@@ -68,7 +68,7 @@ app.post('/box/new',
         if (!errors.isEmpty()) {
             // re-render the page with errors displaying
             resp.render('pages/newBox', {
-                formErrors: errors.array(), 
+                formErrors: errors.array(),
                 body: req.body
             })
         } else {
@@ -83,7 +83,7 @@ app.post('/box/new',
 ///////////////////////////////////// NEW NOTE ////////////////////////////////////////
 
 // when a new Note is added check the boxCode and link it to a corresponding box
-app.get('/box/:code/submit', 
+app.get('/box/:code/submit',
     sanitizeBody('message').trim(),
     (req, resp) => {
         api.getBoxByCode(req.params.code)
@@ -97,7 +97,7 @@ app.get('/box/:code/submit',
     }
 )
 
-app.post('/box/:code/submit', 
+app.post('/box/:code/submit',
     (req, resp) => {
         api.createNote(req.params.code, req.body.message)
             .then(res => {
@@ -121,7 +121,7 @@ app.post('/box/:code/submit',
 
 app.get('/box/:code', (req, resp, next) => {
     api.getBoxByCode(req.params.code)
-        .then(box => 
+        .then(box =>
             resp.render('pages/boxPage', { box: box })
         )
         .catch(err => { next(err) })
@@ -146,10 +146,14 @@ app.get('/box/:code/content', (req, resp) => {
 
 ///////////////////////////////////// ERRORS AND LISTENING ////////////////////////////////////////
 
-app.use(function (err, req, resp, next) {
-    console.error(err.stack);
-    console.log(err);
-    resp.render('pages/error', { message: err.response.data })
+app.all('/*', (req, resp, next) => {
+    next(new Error('The page you are looking for can\'t be found'))
+})
+
+app.use((err, req, resp, next) => {
+    const message = err.response ? err.response.data : err.message
+    console.log('General error: ' + message);
+    resp.render('pages/error', { message })
 })
 
 app.listen(process.env.PORT, process.env.HOST, () => {

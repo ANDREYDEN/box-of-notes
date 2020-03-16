@@ -14,20 +14,29 @@ class Api {
         })
     }
 
+    static handleError(err) {
+        console.log('Error accessing API')
+        throw err
+    }
+
     getBoxByCode(boxCode) {
         return this.instance.get(`/boxes/${boxCode}`)
             .then(resp => {
-                resp.data ? new Box(resp.data) : null
+                if (resp.status == 200) {
+                    return new Box(resp.data)
+                } else {
+                    throw new Error(resp.data)
+                }
             })
-            .catch(err => { throw err })
-        }
-        
+            .catch(Api.handleError)
+    }
+
     getNotesFromBox(boxCode) {
         return this.instance.get(`/boxes/${boxCode}/notes`)
             .then(resp => resp.data)
-            .catch(err => { throw err })
+            .catch(Api.handleError)
     }
-    
+
     createBox(openTime, details) {
         const BOX_CODE = generateBoxCode()
         return this.instance.post('/boxes', {
@@ -35,10 +44,10 @@ class Api {
             openTime: openTime,
             details: details
         })
-            .then(resp => BOX_CODE) 
-            .catch(err => { throw err })
+            .then(resp => BOX_CODE)
+            .catch(Api.handleError)
     }
-    
+
     createNote(boxCode, message) {
         return this.getBoxByCode(boxCode)
             .then(box => {
@@ -51,7 +60,7 @@ class Api {
                     message: message
                 })
                     .then(resp => resp.data)
-                    .catch(err => { throw err })
+                    .catch(Api.handleError)
             })
     }
 }

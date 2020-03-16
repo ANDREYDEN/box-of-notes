@@ -34,7 +34,7 @@ router.get('/boxes/:boxCode', (req, resp) => {
     db.query(query, [req.params.boxCode], (err, boxes) => {
         if (err) {
             resp.status(500).send(err)
-        } else if (boxes.length == 0){
+        } else if (boxes.length == 0) {
             resp.status(502).send('Box does not exist')
         } else {
             resp.send(boxes[0])
@@ -44,7 +44,7 @@ router.get('/boxes/:boxCode', (req, resp) => {
 
 // get notes from box 
 router.get('/boxes/:boxCode/notes', (req, resp) => {
-    const query = `SELECT * FROM note WHERE note.boxCode = ?`
+    const query = `SELECT * FROM note WHERE boxCode = ?`
     db.query(query, [req.params.boxCode], (err, notes) => {
         if (err) throw err
         resp.send(notes)
@@ -52,7 +52,7 @@ router.get('/boxes/:boxCode/notes', (req, resp) => {
 })
 
 // create note
-router.post('/notes', (req,resp) => {
+router.post('/notes', (req, resp) => {
     const query = `INSERT INTO note(boxCode, message) VALUES (?, ?)`
     db.query(query, [req.body.boxCode, req.body.message], (err, res) => {
         if (err) throw err

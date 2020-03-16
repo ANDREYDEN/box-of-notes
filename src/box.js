@@ -2,7 +2,7 @@ const { getEpochMs } = require('./functions')
 
 class Box {
     constructor(box) {
-        Object.keys(box).forEach(e => this[e] = box[e]);
+        Object.keys(box).forEach(param => this[param] = box[param]);
     }
 
     get formatedDate() {
