@@ -1,8 +1,11 @@
-const { getEpochMs } = require('./functions')
+'use strict'
+const { getEpochMs } = require('../src/functions')
 
 class Box {
-    constructor(box) {
-        Object.keys(box).forEach(param => this[param] = box[param]);
+    constructor({ boxCode, openTime, details }) {
+        this.boxCode = boxCode
+        this.openTime = openTime
+        this.details = details
     }
 
     get formatedDate() {

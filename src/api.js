@@ -1,7 +1,8 @@
 const axios = require('axios')
 
 const { generateBoxCode } = require('./functions')
-const Box = require('./box')
+const Box = require('../models/box')
+const Note = require('../models/note')
 
 class Api {
     constructor() {
@@ -33,7 +34,7 @@ class Api {
 
     getNotesFromBox(boxCode) {
         return this.instance.get(`/boxes/${boxCode}/notes`)
-            .then(resp => resp.data)
+            .then(resp => resp.data.map(jsonNote => new Note(jsonNote)))
             .catch(Api.handleError)
     }
 
