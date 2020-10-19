@@ -5,7 +5,7 @@ export default class BoxCreate extends React.Component {
     render() {
         return (
             <div>
-                <form action="/box/new" method="post">
+                <form className="container" action="/box/new" method="post">
                     <h1>New Box</h1>
 
                     <label htmlFor="time">Opening Time</label><br />
