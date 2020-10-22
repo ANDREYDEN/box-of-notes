@@ -1,17 +1,42 @@
 import React from "react"
-import Box from "../models/Box"
+import IBox from "../models/Box"
 import Firestore from "../utilities/database"
 
-export default class BoxCreate extends React.Component {
-    private box!: Box;
+interface BoxCreateState {
+    box: IBox
+}
 
-    createBox(event: React.FormEvent) {
-        event.preventDefault()
-        Firestore.instance.db.collection('boxes').add(this.box)
+export default class BoxCreate extends React.Component<any, BoxCreateState> {
+    constructor(props: any) {
+        super(props)
+        this.state = {
+            box: {}
+        }
     }
 
-    updateTime() {
+    private box!: IBox;
 
+    createBox = (event: React.FormEvent) => {
+        event.preventDefault()
+        debugger
+        Firestore.instance.createBox(this.state.box);
+    }
+
+    updateTime = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({
+            box: {
+                ...this.state.box, openingTime: new Date(event.target.value ?? Date.now())
+            }
+        })
+    }
+
+    updateDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
+        debugger
+        this.setState({
+            box: {
+                ...this.state.box, description: event.target.value ?? ""
+            }
+        })
     }
 
     render() {
@@ -21,9 +46,15 @@ export default class BoxCreate extends React.Component {
                     <h1>New Box</h1>
 
                     <label htmlFor="time">Opening Time</label><br />
-                    <input type="datetime-local" name="time" id="time" autoFocus onChange={this.updateTime} /><br />
-                    <label htmlFor="details">Box Description</label><br />
-                    <input type="text" name="details" id="details" /><br />
+                    <input type="datetime-local" name="time" id="time" autoFocus
+                        onChange={this.updateTime}
+                    /><br />
+
+                    <label htmlFor="details">Description</label><br />
+                    <input type="text" name="details" id="details"
+                        onChange={this.updateDescription}
+                    /><br />
+
                     <input type="submit" value="Create Box" />
                     <a href="/" className="button">Back</a>
                 </form>

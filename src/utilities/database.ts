@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import IBox from '../models/Box';
 import serviceAccount from '../service-account.json'
 
 export default class Firestore {
@@ -24,5 +25,9 @@ export default class Firestore {
             this._instance = new Firestore();
         }
         return this._instance;
+    }
+
+    public async createBox(box: IBox) {
+        await Firestore.instance.db.collection('boxes').add(box)
     }
 }

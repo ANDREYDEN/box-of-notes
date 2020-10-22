@@ -1,4 +1,4 @@
-export default interface Box {
-    openingTime: Date
-    description: string
+export default interface IBox {
+    openingTime?: Date
+    description?: string
 }
