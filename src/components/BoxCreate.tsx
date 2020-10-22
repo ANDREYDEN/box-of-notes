@@ -45,12 +45,12 @@ export default class BoxCreate extends React.Component<any, BoxCreateState> {
                 <form className="container" onSubmit={this.createBox}>
                     <h1>New Box</h1>
 
-                    <label htmlFor="time">Opening Time</label><br />
+                    <label htmlFor="time">Opening Time</label>
                     <input type="datetime-local" name="time" id="time" autoFocus
                         onChange={this.updateTime}
                     /><br />
 
-                    <label htmlFor="details">Description</label><br />
+                    <label htmlFor="details">Description</label>
                     <input type="text" name="details" id="details"
                         onChange={this.updateDescription}
                     /><br />

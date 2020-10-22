@@ -1,6 +1,7 @@
 import React from 'react';
-import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import BoxCreate from './components/BoxCreate';
+import Home from './components/Home';
 
 export default class App extends React.Component {
   render() {
@@ -8,16 +9,9 @@ export default class App extends React.Component {
       <BrowserRouter>
         <div className="App">
           <Switch>
-            <Route path="/box" component={BoxCreate}></Route>
+            <Route exact path="/" component={Home} />
+            <Route path="/box" component={BoxCreate} />
           </Switch>
-
-          <h1>Box of Notes</h1>
-          <Link to="/box">Create Box</Link>
-          <h2>Yours boxes:</h2>
-          <ul>
-            <li>Box1</li>
-            <li>Box2</li>
-          </ul>
         </div>
       </BrowserRouter>
     )
