@@ -6,11 +6,12 @@ import BoxCreate from "./BoxCreate";
 
 describe('BoxCreate', () => {
     it('creates a new box', async () => {
-        Firestore.prototype.createBox = jest.fn(async (box: IBox) => { console.log(box) }).mockResolvedValue()
+        Firestore.prototype.createBox = jest.fn(async (box: IBox) => { }).mockResolvedValue()
 
+        const openingTimeString = '2020-02-02T05:00:00.000'
         const testBox: IBox = {
             description: "Test box",
-            openingTime: new Date('2020/02/02')
+            openingTime: new Date(openingTimeString)
         }
 
         const { getByLabelText, getByText } = render(<BoxCreate />)
@@ -19,7 +20,7 @@ describe('BoxCreate', () => {
         const submit: HTMLElement = getByText("Create Box")
 
         fireEvent.change(openingTime, {
-            target: { value: testBox.openingTime?.toLocaleString() }
+            target: { value: openingTimeString }
         })
         fireEvent.change(description, {
             target: { value: testBox.description }
