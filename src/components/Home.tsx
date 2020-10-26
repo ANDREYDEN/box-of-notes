@@ -1,25 +1,33 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import IBox from "../models/Box";
+import Firestore from "../utilities/database";
+import BoxList from "./BoxList";
 
 export interface HomeProps {
 
 }
 
 export interface HomeState {
-
+    boxes: IBox[]
 }
 
 export default class Home extends React.Component<HomeProps, HomeState> {
+    state: HomeState = {
+        boxes: []
+    }
+
+    async componentDidMount() {
+        const boxes = await Firestore.instance.getBoxes()
+        this.setState({ boxes })
+    }
+
     render() {
         return (
             <div>
                 <h1>Box of Notes</h1>
                 <Link to="/box">Create Box</Link>
-                <h2>Your boxes:</h2>
-                <ul>
-                    <li>Box1</li>
-                    <li>Box2</li>
-                </ul>
+                <BoxList boxes={this.state.boxes} />
             </div>
         )
     }

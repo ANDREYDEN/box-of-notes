@@ -3,7 +3,7 @@ import IBox from "../models/Box"
 import Firestore from "../utilities/database"
 
 interface BoxCreateState {
-    box: IBox
+    box: IBox | null
 }
 
 export default class BoxCreate extends React.Component<any, BoxCreateState> {
@@ -18,8 +18,9 @@ export default class BoxCreate extends React.Component<any, BoxCreateState> {
 
     createBox = (event: React.FormEvent) => {
         event.preventDefault()
-        debugger
-        Firestore.instance.createBox(this.state.box);
+        if (this.state.box) {
+            Firestore.instance.createBox(this.state.box);
+        }
     }
 
     updateTime = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +32,6 @@ export default class BoxCreate extends React.Component<any, BoxCreateState> {
     }
 
     updateDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
-        debugger
         this.setState({
             box: {
                 ...this.state.box, description: event.target.value ?? ""
