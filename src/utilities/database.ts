@@ -33,6 +33,8 @@ export default class Firestore {
 
     public async getBoxes(): Promise<IBox[]> {
         const collectionSnap = await Firestore.instance.db.collection('boxes').get()
-        return collectionSnap.docs.map(doc => doc.data() as IBox)
+        return collectionSnap.docs.map(doc => {
+            return { ...doc.data(), id: doc.id } as IBox
+        })
     }
 }
