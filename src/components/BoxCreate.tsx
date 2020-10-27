@@ -1,4 +1,5 @@
-import React from "react"
+import React, { FunctionComponent, useState } from "react"
+import { useHistory } from "react-router"
 import IBox from "../models/Box"
 import Firestore from "../utilities/database"
 
@@ -6,59 +7,62 @@ interface BoxCreateState {
     box: IBox | null
 }
 
-export default class BoxCreate extends React.Component<any, BoxCreateState> {
-    constructor(props: any) {
-        super(props)
-        this.state = {
-            box: {}
-        }
+interface BoxProps {
+
+}
+
+export const BoxCreate: FunctionComponent<BoxProps> = (props: BoxProps) => {
+    const [state, setState] = useState<BoxCreateState>()
+    const history = useHistory()
+    const defaultState: BoxCreateState = {
+        box: {}
+    }
+    if (!state) {
+        setState(defaultState)
     }
 
-    private box!: IBox;
-
-    createBox = (event: React.FormEvent) => {
+    const createBox = async (event: React.FormEvent) => {
         event.preventDefault()
-        if (this.state.box) {
-            Firestore.instance.createBox(this.state.box);
+        if (state?.box) {
+            await Firestore.instance.createBox(state.box);
+            history.push('/')
         }
     }
 
-    updateTime = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({
+    const updateTime = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setState({
             box: {
-                ...this.state.box, openingTime: new Date(event.target.value ?? Date.now())
+                ...state?.box, openingTime: new Date(event.target.value ?? Date.now())
             }
         })
     }
 
-    updateDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({
+    const updateDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setState({
             box: {
-                ...this.state.box, description: event.target.value ?? ""
+                ...state?.box, description: event.target.value ?? ""
             }
         })
     }
 
-    render() {
-        return (
-            <div>
-                <form className="container" onSubmit={this.createBox}>
-                    <h1>New Box</h1>
+    return (
+        <div>
+            <form className="container" onSubmit={createBox}>
+                <h1>New Box</h1>
 
-                    <label htmlFor="time">Opening Time</label>
-                    <input type="datetime-local" name="time" id="time" autoFocus
-                        onChange={this.updateTime}
-                    /><br />
+                <label htmlFor="time">Opening Time</label>
+                <input type="datetime-local" name="time" id="time" autoFocus
+                    onChange={updateTime}
+                /><br />
 
-                    <label htmlFor="details">Description</label>
-                    <input type="text" name="details" id="details"
-                        onChange={this.updateDescription}
-                    /><br />
+                <label htmlFor="details">Description</label>
+                <input type="text" name="details" id="details"
+                    onChange={updateDescription}
+                /><br />
 
-                    <input type="submit" value="Create Box" />
-                    <a href="/" className="button">Back</a>
-                </form>
-            </div>
-        )
-    }
+                <input type="submit" value="Create Box" />
+                <a href="/" className="button">Back</a>
+            </form>
+        </div>
+    )
 }
