@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import IBox from "../models/Box";
 import { Urls } from "../types/urls";
@@ -13,23 +13,26 @@ export interface HomeState {
     boxes: IBox[]
 }
 
-export default class Home extends React.Component<HomeProps, HomeState> {
-    state: HomeState = {
-        boxes: []
+export const Home: React.FC = () => {
+    const [state, setState] = useState<HomeState>()
+
+    if (!state) {
+        setState({
+            boxes: []
+        })
+        return (<div></div>)
     }
 
-    async componentDidMount() {
+    async function componentDidMount() {
         const boxes = await Firestore.instance.getBoxes()
-        this.setState({ boxes })
+        setState({ boxes })
     }
 
-    render() {
-        return (
-            <div>
-                <h1>Box of Notes</h1>
-                <Link to={Urls.NewBox}>Create Box</Link>
-                <BoxList boxes={this.state.boxes} />
-            </div>
-        )
-    }
+    return (
+        <div>
+            <h1>Box of Notes</h1>
+            <Link to={Urls.NewBox}>Create Box</Link>
+            <BoxList boxes={state.boxes} />
+        </div>
+    )
 }

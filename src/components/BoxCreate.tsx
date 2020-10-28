@@ -20,11 +20,12 @@ export const BoxCreate: FunctionComponent<BoxProps> = (props: BoxProps) => {
     }
     if (!state) {
         setState(defaultState)
+        return (<div></div>)
     }
 
     const createBox = async (event: React.FormEvent) => {
         event.preventDefault()
-        if (state?.box) {
+        if (state.box) {
             await Firestore.instance.createBox(state.box);
             history.push(Urls.Home)
         }
@@ -33,7 +34,7 @@ export const BoxCreate: FunctionComponent<BoxProps> = (props: BoxProps) => {
     const updateTime = (event: React.ChangeEvent<HTMLInputElement>) => {
         setState({
             box: {
-                ...state?.box, openingTime: new Date(event.target.value ?? Date.now())
+                ...state.box, openingTime: new Date(event.target.value ?? Date.now())
             }
         })
     }
@@ -41,7 +42,7 @@ export const BoxCreate: FunctionComponent<BoxProps> = (props: BoxProps) => {
     const updateDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
         setState({
             box: {
-                ...state?.box, description: event.target.value ?? ""
+                ...state.box, description: event.target.value ?? ""
             }
         })
     }

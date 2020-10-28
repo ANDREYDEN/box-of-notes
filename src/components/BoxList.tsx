@@ -1,5 +1,6 @@
 import React from "react";
 import IBox from "../models/Box";
+import BoxListItem from "./BoxListItem";
 
 export interface BoxListProps {
     boxes: IBox[]
@@ -17,8 +18,7 @@ class BoxList extends React.Component<BoxListProps, BoxListState> {
                     {this.props.boxes.map(box => {
                         return (
                             <li key={box.id} data-testid="box-item">
-                                <p>Description: {box.description}</p>
-                                <p>Opening time: {box.openingTime?.toString()}</p>
+                                <BoxListItem box={box} />
                             </li>
                         )
                     })}
