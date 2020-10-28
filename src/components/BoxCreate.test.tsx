@@ -6,13 +6,7 @@ import { BoxCreate } from "./BoxCreate";
 import { history } from '../history'
 import { Router } from "react-router-dom";
 import { Urls } from "../types/urls";
-
-const renderInRouter = (Comp: React.FC) =>
-    render(
-        <Router history={history}>
-            <Comp />
-        </Router>
-    );
+import { renderInRouter } from "../testing";
 
 describe('BoxCreate', () => {
     let wrapper: RenderResult;

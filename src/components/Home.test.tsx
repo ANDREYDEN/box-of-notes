@@ -1,17 +1,9 @@
-import { render, RenderResult } from "@testing-library/react"
-import React from "react"
-import { Router } from "react-router-dom"
+import { RenderResult } from "@testing-library/react"
 import { history } from '../history'
 import { Urls } from "../types/urls"
 import { Home } from "./Home"
+import { renderInRouter } from "../testing"
 
-const renderInRouter = (Comp: React.FC) => {
-    return render(
-        <Router history={history}>
-            <Comp />
-        </Router>
-    )
-}
 describe('Home', () => {
     let wrapper: RenderResult
 
