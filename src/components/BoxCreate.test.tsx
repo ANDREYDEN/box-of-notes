@@ -5,6 +5,7 @@ import Firestore from "../utilities/database";
 import { BoxCreate } from "./BoxCreate";
 import { history } from '../history'
 import { Router } from "react-router-dom";
+import { Urls } from "../types/urls";
 
 const renderInRouter = (Comp: React.FC) =>
     render(
@@ -18,7 +19,7 @@ describe('BoxCreate', () => {
 
     beforeEach(() => {
         wrapper = renderInRouter(BoxCreate)
-        history.push('/box')
+        history.push(Urls.NewBox)
     })
 
     afterEach(() => {
@@ -70,6 +71,6 @@ describe('BoxCreate', () => {
         })
         fireEvent.click(submit)
 
-        expect(history.location.pathname[location.pathname.length - 1]).toBe('/')
+        expect(history.location.pathname[location.pathname.length - 1]).toBe(Urls.Home)
     })
 })

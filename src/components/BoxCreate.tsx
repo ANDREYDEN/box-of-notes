@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react"
 import { useHistory } from "react-router"
 import IBox from "../models/Box"
+import { Urls } from "../types/urls"
 import Firestore from "../utilities/database"
 
 interface BoxCreateState {
@@ -25,7 +26,7 @@ export const BoxCreate: FunctionComponent<BoxProps> = (props: BoxProps) => {
         event.preventDefault()
         if (state?.box) {
             await Firestore.instance.createBox(state.box);
-            history.push('/')
+            history.push(Urls.Home)
         }
     }
 
