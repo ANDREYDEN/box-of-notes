@@ -1,10 +1,8 @@
 import { render, RenderResult } from "@testing-library/react"
 import React from "react"
 import IBox from "../models/Box"
-import { renderInRouter } from "../testing"
 import { Urls } from "../types/urls"
 import BoxListItem from "./BoxListItem"
-import { Home } from "./Home"
 import { history } from '../history'
 
 const testBox: IBox = {
@@ -17,7 +15,7 @@ describe('BoxListItem', () => {
     let wrapper: RenderResult
 
     beforeEach(() => {
-        wrapper = renderInRouter(Home);
+        wrapper = render(<BoxListItem box={testBox} />)
         history.push(Urls.Home)
     })
 
@@ -26,9 +24,7 @@ describe('BoxListItem', () => {
     })
 
     it('should display basic box data', () => {
-        const { getByText } = render(<BoxListItem box={testBox} />)
-
-        const boxDescription = getByText(new RegExp(testBox.description!, 'g'))
+        const boxDescription = wrapper.getByText(new RegExp(testBox.description!, 'g'))
 
         expect(boxDescription).toBeDefined()
     })

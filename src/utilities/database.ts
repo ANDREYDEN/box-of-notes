@@ -28,13 +28,19 @@ export default class Firestore {
     }
 
     public async createBox(box: IBox) {
-        await Firestore.instance.db.collection('boxes').add(box)
+        await this.db.collection('boxes').add(box)
     }
 
     public async getBoxes(): Promise<IBox[]> {
-        const collectionSnap = await Firestore.instance.db.collection('boxes').get()
+        const collectionSnap = await this.db.collection('boxes').get()
         return collectionSnap.docs.map(doc => {
             return { ...doc.data(), id: doc.id } as IBox
         })
+    }
+
+    public async getBox(id: string): Promise<IBox> {
+        // TODO: handle not found case
+        const documentSnap = await this.db.collection('boxes').doc(id).get()
+        return { ...documentSnap.data(), id: documentSnap.id } as IBox
     }
 }
