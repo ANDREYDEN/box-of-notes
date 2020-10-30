@@ -1,4 +1,4 @@
-import { render, RenderResult } from "@testing-library/react"
+import { fireEvent, render, RenderResult } from "@testing-library/react"
 import React from "react"
 import IBox from "../models/Box"
 import { Urls } from "../types/urls"
@@ -29,5 +29,12 @@ describe('BoxListItem', () => {
         expect(boxDescription).toBeDefined()
     })
 
-    it.todo('should forward to the box page on click')
+    it('should forward to the box page on click', () => {
+        const boxDescription = wrapper.getByText(new RegExp(testBox.description!, 'g'))
+
+        expect(boxDescription.parentElement).toBeDefined()
+        fireEvent.click(boxDescription.parentElement!)
+
+        expect(history.location.pathname).toEqual(`/box/${testBox.id}`)
+    })
 })
