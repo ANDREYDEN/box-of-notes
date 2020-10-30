@@ -12,8 +12,7 @@ describe('BoxCreate', () => {
     let wrapper: RenderResult;
 
     beforeEach(() => {
-        wrapper = renderInRouter(BoxCreate)
-        history.push(Urls.NewBox)
+        wrapper = renderInRouter(<BoxCreate />, Urls.NewBox)
     })
 
     afterEach(() => {

@@ -3,13 +3,13 @@ import { history } from '../history'
 import { Urls } from "../types/urls"
 import { Home } from "./Home"
 import { renderInRouter } from "../testing"
+import React from "react"
 
 describe('Home', () => {
     let wrapper: RenderResult
 
     beforeEach(() => {
-        wrapper = renderInRouter(Home);
-        history.push(Urls.Home)
+        wrapper = renderInRouter(<Home />, Urls.Home)
     })
 
     afterEach(() => {

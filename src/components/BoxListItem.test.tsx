@@ -4,6 +4,7 @@ import IBox from "../models/Box"
 import { Urls } from "../types/urls"
 import BoxListItem from "./BoxListItem"
 import { history } from '../history'
+import { renderInRouter } from "../testing"
 
 const testBox: IBox = {
     id: 'testId',
@@ -15,8 +16,7 @@ describe('BoxListItem', () => {
     let wrapper: RenderResult
 
     beforeEach(() => {
-        wrapper = render(<BoxListItem box={testBox} />)
-        history.push(Urls.Home)
+        wrapper = renderInRouter(<BoxListItem box={testBox} />, Urls.Home)
     })
 
     afterEach(() => {

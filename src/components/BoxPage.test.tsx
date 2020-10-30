@@ -20,8 +20,7 @@ describe('BoxPage', () => {
     })
 
     beforeEach(() => {
-        wrapper = renderInRouter(BoxPage);
-        history.push('/box/testId')
+        wrapper = renderInRouter(< BoxPage />, '/box/testId');
     })
 
     afterEach(() => {
