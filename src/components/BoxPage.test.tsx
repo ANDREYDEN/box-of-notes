@@ -1,11 +1,11 @@
-import { render, RenderResult } from "@testing-library/react";
+import { act, RenderResult } from "@testing-library/react";
 import React from "react";
 import IBox from "../models/Box";
 import { renderInRouter } from "../testing";
 import BoxPage from "./BoxPage";
 import { history } from '../history'
 import Firestore from "../utilities/database";
-import { act } from "react-dom/test-utils";
+import { Urls } from "../types/urls";
 
 const testBox: IBox = {
     id: 'testId',
@@ -16,16 +16,23 @@ const testBox: IBox = {
 describe('BoxPage', () => {
     let wrapper: RenderResult
     beforeAll(() => {
-        Firestore.prototype.getBox = jest.fn().mockResolvedValue(testBox)
+        Firestore.prototype.getBox = jest.fn(async (id: string): Promise<IBox> => {
+            return new Promise(resolve => resolve(testBox))
+        })
     })
 
     beforeEach(() => {
-        wrapper = renderInRouter(< BoxPage />, '/box/testId');
+        act(() => {
+            wrapper = renderInRouter(< BoxPage />, Urls.BoxPage, { id: testBox.id! });
+        })
     })
 
     afterEach(() => {
         wrapper.unmount()
     })
 
-    it.todo('should render the box with the passed id')
+    it('should render the box with the passed id', () => {
+        expect(history.location.pathname).toEqual(Urls.BoxPage({ id: testBox.id }))
+        expect(Firestore.prototype.getBox).toHaveBeenCalledWith(testBox.id)
+    })
 })

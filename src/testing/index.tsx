@@ -1,16 +1,24 @@
 import { render, RenderResult } from "@testing-library/react";
 import React from "react";
-import { Router } from "react-router-dom";
+import { Route, Router } from "react-router-dom";
 import { history } from '../history';
 
-export const renderInRouter = (Comp: JSX.Element, route: string = ''): RenderResult => {
+type RouteFunction = (params?: any) => string
+
+export const renderInRouter = (
+    Comp: JSX.Element,
+    route: string | RouteFunction,
+    params?: any
+): RenderResult => {
+    const routeFn: RouteFunction = typeof (route) === 'string' ? (() => route) : route
+
     const result: RenderResult = render(
         <Router history={history}>
-            {Comp}
+            <Route path={routeFn()}>
+                {Comp}
+            </Route>
         </Router>
     );
-    if (route !== '') {
-        history.push(route)
-    }
+    history.push(routeFn(params))
     return result
 };
