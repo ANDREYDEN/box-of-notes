@@ -1,3 +1,9 @@
+import Button from "@material-ui/core/Button"
+import Link from "@material-ui/core/Link"
+import { createStyles, makeStyles } from "@material-ui/core/styles"
+import { Theme } from "@material-ui/core/styles/createMuiTheme"
+import TextField from "@material-ui/core/TextField"
+import Typography from "@material-ui/core/Typography"
 import React, { FunctionComponent, useState } from "react"
 import { useHistory } from "react-router"
 import IBox from "../models/Box"
@@ -8,11 +14,24 @@ interface BoxCreateState {
     box: IBox | null
 }
 
-interface BoxProps {
+interface BoxProps { }
 
-}
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 0
+        },
+        textField: {
+            margin: theme.spacing(1),
+            width: '25vw',
+        },
+    }),
+);
 
 export const BoxCreate: FunctionComponent<BoxProps> = (props: BoxProps) => {
+    const classes = useStyles()
     const [state, setState] = useState<BoxCreateState>()
     const history = useHistory()
     const defaultState: BoxCreateState = {
@@ -25,6 +44,7 @@ export const BoxCreate: FunctionComponent<BoxProps> = (props: BoxProps) => {
 
     const createBox = async (event: React.FormEvent) => {
         event.preventDefault()
+
         if (state.box) {
             await Firestore.instance.createBox(state.box);
             history.push(Urls.Home)
@@ -49,21 +69,22 @@ export const BoxCreate: FunctionComponent<BoxProps> = (props: BoxProps) => {
 
     return (
         <div>
-            <form className="container" onSubmit={createBox}>
-                <h1>New Box</h1>
+            <form onSubmit={createBox} className={classes.root}>
+                <Typography variant="h4">New Box</Typography>
 
-                <label htmlFor="time">Opening Time</label>
-                <input type="datetime-local" name="time" id="time" autoFocus
+                <TextField type="text" label="Description" name="details" id="details" className={classes.textField}
+                    variant="outlined" multiline autoFocus required
+                    onChange={updateDescription} />
+                <TextField type="datetime-local" label="Opening Time" name="time" id="time" className={classes.textField}
+                    variant="outlined" required
                     onChange={updateTime}
-                /><br />
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                />
 
-                <label htmlFor="details">Description</label>
-                <input type="text" name="details" id="details"
-                    onChange={updateDescription}
-                /><br />
-
-                <input type="submit" value="Create Box" />
-                <a href="/" className="button">Back</a>
+                <Button variant="contained" type="submit">Create Box</Button>
+                <Link href="/">Back</Link>
             </form>
         </div>
     )

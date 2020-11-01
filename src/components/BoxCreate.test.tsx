@@ -4,7 +4,6 @@ import IBox from "../models/Box";
 import Firestore from "../utilities/database";
 import { BoxCreate } from "./BoxCreate";
 import { history } from '../history'
-import { Router } from "react-router-dom";
 import { Urls } from "../types/urls";
 import { renderInRouter } from "../testing";
 
@@ -28,8 +27,8 @@ describe('BoxCreate', () => {
             openingTime: new Date(openingTimeString)
         }
 
-        const openingTime: HTMLElement = wrapper.getByLabelText("Opening Time")
-        const description: HTMLElement = wrapper.getByLabelText("Description")
+        const openingTime: HTMLElement = wrapper.getByLabelText(/Opening Time/i)
+        const description: HTMLElement = wrapper.getByLabelText(/Description/i)
         const submit: HTMLElement = wrapper.getByText("Create Box")
 
         fireEvent.change(openingTime, {
@@ -39,6 +38,10 @@ describe('BoxCreate', () => {
             target: { value: testBox.description }
         })
         fireEvent.click(submit)
+
+        console.log(openingTime.textContent);
+        console.log(description.textContent);
+
 
         expect(Firestore.prototype.createBox).toHaveBeenCalledWith(testBox)
     })
@@ -52,8 +55,8 @@ describe('BoxCreate', () => {
             openingTime: new Date(openingTimeString)
         }
 
-        const openingTime: HTMLElement = wrapper.getByLabelText("Opening Time")
-        const description: HTMLElement = wrapper.getByLabelText("Description")
+        const openingTime: HTMLElement = wrapper.getByLabelText(/Opening Time/i)
+        const description: HTMLElement = wrapper.getByLabelText(/Description/i)
         const submit: HTMLElement = wrapper.getByText("Create Box")
 
         fireEvent.change(openingTime, {
