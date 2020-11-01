@@ -1,3 +1,4 @@
+import { Container } from "@material-ui/core";
 import React from "react";
 import IBox from "../models/Box";
 import BoxListItem from "./BoxListItem";
@@ -14,15 +15,13 @@ class BoxList extends React.Component<BoxListProps, BoxListState> {
         return (
             <div>
                 <h2>Your boxes:</h2>
-                <ul>
+                <Container>
                     {this.props.boxes.map(box => {
                         return (
-                            <li key={box.id} data-testid="box-item">
-                                <BoxListItem box={box} />
-                            </li>
+                            <BoxListItem box={box} key={box.id} />
                         )
                     })}
-                </ul>
+                </Container>
             </div>
         );
     }
