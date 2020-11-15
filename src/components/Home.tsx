@@ -4,8 +4,9 @@ import { Urls } from "../types/urls";
 import Firestore from "../utilities/database";
 import BoxList from "./BoxList";
 
+import firebase from '../firebase'
 import { history } from '../history'
-import { AppBar, Toolbar, Typography, Button, makeStyles, Theme, createStyles } from "@material-ui/core";
+import { AppBar, Toolbar, Typography, Button, makeStyles, Theme, createStyles, Avatar } from "@material-ui/core";
 import Auth from "../utilities/auth";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,14 +25,28 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const Home: React.FC = () => {
     const [boxes, setBoxes] = useState<IBox[]>()
+    const [user, setUser] = useState<firebase.User | null>()
     const classes = useStyles()
 
     useEffect(() => {
         Firestore.instance.getBoxes().then(setBoxes)
+        Auth.instance.onAuthStateChanged(user => {
+            setUser(user)
+        })
     }, [])
+
 
     const handleCreateBox = () => {
         history.push(Urls.NewBox)
+    }
+
+    const getAccountButton = () => {
+        console.log(user);
+
+        if (!user) {
+            return <Button color="inherit" onClick={() => Auth.instance.signIn()}>Sign In</Button>
+        }
+        return <Avatar src={user.photoURL ?? ''} />
     }
 
     return (
@@ -41,7 +56,7 @@ export const Home: React.FC = () => {
                     <Typography variant="h6" className={classes.title}>
                         Box of Notes
                     </Typography>
-                    <Button color="inherit" onClick={() => Auth.instance.signIn()}>Sign In</Button>
+                    {getAccountButton()}
                 </Toolbar>
             </AppBar>
 
