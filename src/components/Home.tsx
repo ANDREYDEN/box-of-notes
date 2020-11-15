@@ -6,7 +6,7 @@ import BoxList from "./BoxList";
 
 import firebase from '../firebase'
 import { history } from '../history'
-import { AppBar, Toolbar, Typography, Button, makeStyles, Theme, createStyles, Avatar } from "@material-ui/core";
+import { AppBar, Toolbar, Typography, Button, makeStyles, Theme, createStyles, Avatar, Menu, MenuItem } from "@material-ui/core";
 import Auth from "../utilities/auth";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -24,8 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const Home: React.FC = () => {
+    const [menuAnchorElement, setMenuAnchorElement] = useState<HTMLElement | null>(null)
     const [boxes, setBoxes] = useState<IBox[]>()
-    const [user, setUser] = useState<firebase.User | null>()
+    const [user, setUser] = useState<firebase.User | null>(Auth.instance.user)
     const classes = useStyles()
 
     useEffect(() => {
@@ -40,13 +41,26 @@ export const Home: React.FC = () => {
         history.push(Urls.NewBox)
     }
 
+    const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
+        setMenuAnchorElement(event.currentTarget)
+    }
+
+    const handleMenuClose = () => {
+        setMenuAnchorElement(null);
+    };
+
+    const handleLogOut = () => {
+        Auth.instance.signOut()
+        handleMenuClose()
+    }
+
     const getAccountButton = () => {
         console.log(user);
 
         if (!user) {
             return <Button color="inherit" onClick={() => Auth.instance.signIn()}>Sign In</Button>
         }
-        return <Avatar src={user.photoURL ?? ''} />
+        return <Avatar onClick={handleAvatarClick} src={user.photoURL ?? ''} />
     }
 
     return (
@@ -57,6 +71,16 @@ export const Home: React.FC = () => {
                         Box of Notes
                     </Typography>
                     {getAccountButton()}
+                    <Menu
+                        id="simple-menu"
+                        anchorEl={menuAnchorElement}
+                        keepMounted
+                        open={Boolean(menuAnchorElement)}
+                        onClose={handleMenuClose}
+                    >
+                        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+                        <MenuItem onClick={handleLogOut}>Logout</MenuItem>
+                    </Menu>
                 </Toolbar>
             </AppBar>
 

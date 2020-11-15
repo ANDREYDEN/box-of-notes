@@ -25,4 +25,17 @@ describe('Home', () => {
 
         expect(Auth.instance.signIn).toHaveBeenCalled()
     })
+
+    it('signs out', () => {
+        Auth.instance.signIn = jest.fn().mockResolvedValue({})
+        Auth.instance.signOut = jest.fn().mockResolvedValue({})
+        const signInButton: HTMLElement = wrapper.getByText(/[Ss]ign [Ii]n/g)
+        const signOutButton: HTMLElement = wrapper.getByText(/[Ll]ogout/g)
+
+        fireEvent.click(signInButton)
+        fireEvent.click(signOutButton)
+
+
+        expect(Auth.instance.signOut).toHaveBeenCalled()
+    })
 })
