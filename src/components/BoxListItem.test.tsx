@@ -1,4 +1,4 @@
-import { fireEvent, render, RenderResult } from "@testing-library/react"
+import { fireEvent, RenderResult } from "@testing-library/react"
 import React from "react"
 import IBox from "../models/Box"
 import { Urls } from "../types/urls"

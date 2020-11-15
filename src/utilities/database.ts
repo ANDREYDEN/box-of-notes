@@ -1,14 +1,11 @@
-import firebase from 'firebase';
+import firebase from '../firebase'
 import IBox from '../models/Box';
-import serviceAccount from '../service-account.json'
 
 export default class Firestore {
-    public app!: firebase.app.App;
     public db!: firebase.firestore.Firestore;
 
     private constructor() {
-        this.app = firebase.initializeApp(serviceAccount);
-        this.db = firebase.firestore(this.app);
+        this.db = firebase.firestore()
 
         if (process.env.NODE_ENV === 'development') {
             this.db.settings({

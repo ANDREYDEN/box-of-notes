@@ -6,6 +6,7 @@ import BoxList from "./BoxList";
 
 import { history } from '../history'
 import { AppBar, Toolbar, Typography, Button, makeStyles, Theme, createStyles } from "@material-ui/core";
+import Auth from "../utilities/auth";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -40,7 +41,7 @@ export const Home: React.FC = () => {
                     <Typography variant="h6" className={classes.title}>
                         Box of Notes
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    <Button color="inherit" onClick={() => Auth.instance.signIn()}>Sign In</Button>
                 </Toolbar>
             </AppBar>
 

@@ -42,13 +42,13 @@ export const BoxCreate: FunctionComponent<BoxProps> = (props: BoxProps) => {
         return (<div></div>)
     }
 
-    const createBox = async (event: React.FormEvent) => {
-        event.preventDefault()
 
+    const createBox = async () => {
         if (state.box) {
             await Firestore.instance.createBox(state.box);
             history.push(Urls.Home)
         }
+        console.log('submitted');
     }
 
     const updateTime = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +69,7 @@ export const BoxCreate: FunctionComponent<BoxProps> = (props: BoxProps) => {
 
     return (
         <div>
-            <form onSubmit={createBox} className={classes.root}>
+            <form className={classes.root}>
                 <Typography variant="h4">New Box</Typography>
 
                 <TextField type="text" label="Description" name="details" id="details" className={classes.textField}
@@ -83,7 +83,7 @@ export const BoxCreate: FunctionComponent<BoxProps> = (props: BoxProps) => {
                     }}
                 />
 
-                <Button variant="contained" type="submit">Create Box</Button>
+                <Button onClick={createBox} variant="contained" type="submit">Create Box</Button>
                 <Link href="/">Back</Link>
             </form>
         </div>
