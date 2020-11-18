@@ -6,7 +6,7 @@ import BoxList from "./BoxList";
 
 import firebase from '../firebase'
 import { history } from '../history'
-import { AppBar, Toolbar, Typography, Button, makeStyles, Theme, createStyles, Avatar, Menu, MenuItem } from "@material-ui/core";
+import { AppBar, Toolbar, Typography, Button, makeStyles, Theme, createStyles, Avatar, Menu, MenuItem, IconButton } from "@material-ui/core";
 import Auth from "../utilities/auth";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -60,7 +60,7 @@ export const Home: React.FC = () => {
         if (!user) {
             return <Button color="inherit" onClick={() => Auth.instance.signIn()}>Sign In</Button>
         }
-        return <Avatar onClick={handleAvatarClick} src={user.photoURL ?? ''} />
+        return <IconButton onClick={handleAvatarClick}><Avatar src={user.photoURL ?? ''} /></IconButton>
     }
 
     return (
