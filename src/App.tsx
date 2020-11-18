@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { BoxCreate } from './components/BoxCreate';
 import BoxPage from './components/BoxPage';

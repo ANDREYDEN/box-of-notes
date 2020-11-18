@@ -1,4 +1,4 @@
-import { Card, Container, List, ListSubheader } from "@material-ui/core";
+import { Card, List, ListSubheader } from "@material-ui/core";
 import React from "react";
 import IBox from "../models/Box";
 import BoxListItem from "./BoxListItem";
